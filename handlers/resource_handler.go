@@ -17,18 +17,22 @@ func createResourceHandler(conn net.Conn, originalMessage []byte) {
 
 	fmt.Println("req ", req)
 	response := library.CreateResourceResponse{
-		Success:false,
+		Success: false,
 	}
-	if Authenticate(req.Email, req.Password, req.Token, req.UserID){
-		err := addResource(req.UserID, req.Resource)
-		if len(err)>0 {
-			response.Error = err
-			fmt.Println(err)
-		}else{
-			response.Success = true
+	if Authenticate(req.Email, req.Password, req.Token, req.UserID) {
+		if !canAddResource(req.UserID) {
+			response.Error = "Qouta limit exceeded"
+		} else {
+			err := addResource(req.UserID, req.Resource)
+			if len(err) > 0 {
+				response.Error = err
+				fmt.Println(err)
+			} else {
+				response.Success = true
+			}
 		}
 
-	}else{
+	} else {
 		response.Error = "Authentication Error"
 	}
 	fmt.Println("sending response: ", response)
@@ -52,16 +56,16 @@ func listResourceHandler(conn net.Conn, originalMessage []byte) {
 	fmt.Println("req ", req)
 	response := library.ListResourceResponse{}
 
-	if Authenticate(req.Email, req.Password, req.Token, req.UserID){
+	if Authenticate(req.Email, req.Password, req.Token, req.UserID) {
 		list, err := listResource(req.UserID)
-		if len(err)>0 {
+		if len(err) > 0 {
 			response.Error = err
 			fmt.Println(err)
-		}else{
+		} else {
 			response.Resource = append(response.Resource, list...)
 		}
 
-	}else{
+	} else {
 		response.Error = "Authentication Error"
 	}
 
@@ -84,18 +88,18 @@ func deleteResourceHandler(conn net.Conn, originalMessage []byte) {
 
 	fmt.Println("req ", req)
 	response := library.DeleteResourceResponse{
-		Success:false,
+		Success: false,
 	}
-	if Authenticate(req.Email, req.Password, req.Token, req.UserID){
+	if Authenticate(req.Email, req.Password, req.Token, req.UserID) {
 		err := deleteResource(req.UserID, req.Resource)
-		if len(err)>0 {
+		if len(err) > 0 {
 			response.Error = err
 			fmt.Println(err)
-		}else{
+		} else {
 			response.Success = true
 		}
 
-	}else{
+	} else {
 		response.Error = "Authentication Error"
 	}
 	fmt.Println("sending response: ", response)
@@ -108,4 +112,3 @@ func deleteResourceHandler(conn net.Conn, originalMessage []byte) {
 
 	utilities.Write(conn, dataToSend)
 }
-
