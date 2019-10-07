@@ -22,7 +22,6 @@ func GetDB() *sql.DB {
 }
 
 func tryLogin(request library.LoginRequest) (ret library.LoginResponse) {
-	fmt.Printf("SELECT password, userid FROM user_information WHERE email = %s and deleted = 0\n ", request.Email)
 
 	row, err := DB.Query("SELECT password, userid FROM user_information WHERE email = ? and deleted = 0", request.Email)
 	if err != nil {
@@ -38,6 +37,7 @@ func tryLogin(request library.LoginRequest) (ret library.LoginResponse) {
 			panic(err)
 		}
 	}
+
 
 	if passwordMatch(request.Password, L) {
 		token, err := getToken(request.Email)
@@ -91,6 +91,7 @@ func AuthenticateByToken(token string, userid int) bool {
 			panic(err)
 		}
 	}
+	fmt.Println("usertype, userid", userType, userid)
 	if userType == userAdmin || id == userid {
 		return true
 	}
@@ -103,6 +104,8 @@ func AuthenticateByEmailPassword(email string, password string, userid int) bool
 		Password: password,
 	}
 	response := tryLogin(req)
+
+	fmt.Println("trying long in response : ", response)
 	if len(response.Error) == 0 {
 		return AuthenticateByToken(response.Token, userid)
 	}
@@ -144,6 +147,8 @@ func canAddResource(userId int) bool {
 			panic(err)
 		}
 	}
+
+	fmt.Println(resourceCount, "resoure count  , qouta, ", qouta)
 	if qouta == -1{
 		return true
 	}else if qouta>resourceCount{

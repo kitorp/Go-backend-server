@@ -7,9 +7,9 @@ import (
 )
 
 const(
-	passwordLength = 6
-	emailLength = 3
-	tokenLength = 6
+	passwordLength = 1
+	emailLength = 1
+	tokenLength = 1
 
 
 	userAdmin = 1
@@ -19,7 +19,7 @@ const(
 func Handler(conn net.Conn) {
 	messageInBytes := utilities.Read(conn)
 	messageType, originalMessage := utilities.DecodeMessage(messageInBytes)
-	fmt.Println("original message: ", originalMessage)
+	fmt.Println("message type: ", messageType)
 
 	if messageType == utilities.Login {
 		loginHandler(conn, originalMessage)

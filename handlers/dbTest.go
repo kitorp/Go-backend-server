@@ -60,3 +60,4 @@ func listResourceTest(){
 func deleteResourceTest(){
 	fmt.Println(deleteResource(1000000, "HI there") )
 }
+

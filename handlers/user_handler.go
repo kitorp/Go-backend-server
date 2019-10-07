@@ -16,9 +16,13 @@ func createUserHandler(conn net.Conn, originalMessage []byte) {
 	}
 
 	fmt.Println("req ", req)
-	response := library.CreateUserResponse{}
+	response := library.CreateUserResponse{
+		Success:false,
+	}
+	fmt.Println("I am here")
 	if Authenticate(req.Email, req.Password, req.Token,0){
 		err := createUser(req.UserEmail, req.UserPassword)
+		fmt.Println("user creation error: ", err )
 		if len(err)>0 {
 			response.Error = err
 			fmt.Println(err)
@@ -34,8 +38,6 @@ func createUserHandler(conn net.Conn, originalMessage []byte) {
 	if err != nil {
 		panic(err)
 	}
-
-	fmt.Println("response data: ", dataToSend)
 
 	utilities.Write(conn, dataToSend)
 }
@@ -74,8 +76,6 @@ func listUserHandler(conn net.Conn, originalMessage []byte) {
 		panic(err)
 	}
 
-	fmt.Println("response data: ", dataToSend)
-
 	utilities.Write(conn, dataToSend)
 }
 
@@ -107,8 +107,6 @@ func deleteUserHandler(conn net.Conn, originalMessage []byte) {
 	if err != nil {
 		panic(err)
 	}
-
-	fmt.Println("response data: ", dataToSend)
 
 	utilities.Write(conn, dataToSend)
 }

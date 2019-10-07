@@ -1,6 +1,8 @@
 package utilities
 
-import "encoding/binary"
+import (
+	"encoding/binary"
+)
 
 const (
 	Login          uint32 = 1
@@ -15,6 +17,8 @@ const (
 
 func EncodeMessage(messageType uint32, data []byte) (message []byte) {
 	firstByte := make([]byte, 4)
+
+
 	binary.BigEndian.PutUint32(firstByte, uint32(messageType))
 	message = append(firstByte, data...)
 

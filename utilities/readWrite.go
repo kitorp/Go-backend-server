@@ -9,7 +9,7 @@ import (
 
 func Read(conn net.Conn) (data []byte) {
 
-	messageInBytes := make([]byte, 104)
+	messageInBytes := make([]byte, 1024)
 	_ ,err := bufio.NewReader(conn).Read(messageInBytes)
 	if err != nil {
 		fmt.Println(err)

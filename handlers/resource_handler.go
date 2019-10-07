@@ -41,8 +41,6 @@ func createResourceHandler(conn net.Conn, originalMessage []byte) {
 		panic(err)
 	}
 
-	fmt.Println("response data: ", dataToSend)
-
 	utilities.Write(conn, dataToSend)
 }
 
@@ -74,7 +72,6 @@ func listResourceHandler(conn net.Conn, originalMessage []byte) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("response data: ", dataToSend)
 
 	utilities.Write(conn, dataToSend)
 }
@@ -107,8 +104,6 @@ func deleteResourceHandler(conn net.Conn, originalMessage []byte) {
 	if err != nil {
 		panic(err)
 	}
-
-	fmt.Println("response data: ", dataToSend)
 
 	utilities.Write(conn, dataToSend)
 }
