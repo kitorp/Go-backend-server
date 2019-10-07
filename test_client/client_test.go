@@ -238,7 +238,7 @@ func Test_listUser(t *testing.T) {
 	}
 }
 
-func deleteUserResponseTest(t *testing.T) {
+func Test_deleteUserResponse(t *testing.T) {
 	conn, _ := net.Dial("tcp", "127.0.0.1:8081")
 	defer conn.Close()
 
