@@ -41,7 +41,9 @@ func Handler(conn net.Conn) {
 }
 
 func Authenticate(email string, password string, token string, userid int) bool {
+	fmt.Println("Start to Authenticate")
 	if len(token)>= tokenLength {
+		fmt.Println("here ?")
 		return AuthenticateByToken(token, userid)
 	}else if len(email)>= emailLength && len(password)>=passwordLength {
 		return AuthenticateByEmailPassword(email, password, userid)

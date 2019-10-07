@@ -13,14 +13,14 @@ func main() {
 	//loginTest()
 	//createResourceTest1()
 	//createResourceTest2()
-	//listResourceTest1()
+	listResourceTest1()
 	//listResourceTest2()
 
 	//deleteResourceTest()
 	//setQoutaTest()
 	//createUserTest()
 	//listUserTest()
-	deleteUserResponseTest()
+	//deleteUserResponseTest()
 
 
 
@@ -100,7 +100,7 @@ func listResourceTest1(){
 	defer conn.Close()
 
 	crd := library.ListResourceRequest{
-		Token:    "poi",
+		Token:    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6InByb3RpazIwOTVAZ21haWwuY29tIiwiZXhwIjoxNTcwNTQ5NzU5fQ.324xoWAPu0LHXNHYNIKkk6VVSAqG20Vy794zh-iuQkM",
 		UserID: 1000000,
 	}
 

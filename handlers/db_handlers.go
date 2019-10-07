@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"time"
 )
 
 var (
@@ -65,7 +66,7 @@ func getHashValue(value string) string {
 }
 
 func getToken(email string) (token string, err error) {
-	token = generateToken()
+	token = IssueToken(email,24 * time.Hour )
 	_, err = DB.Exec("update user_information set token = ? where email = ?", token, email)
 	if err != nil {
 		panic(err)
@@ -73,12 +74,14 @@ func getToken(email string) (token string, err error) {
 	return token, nil
 }
 
-func generateToken() string {
-	return "abcd"
-}
-
 func AuthenticateByToken(token string, userid int) bool {
-	row, err := DB.Query("SELECT userid, usertype FROM user_information WHERE token = ? and deleted = 0", token)
+	ok, email := VerifyToken(token)
+	fmt.Println("email : ok : ", email, ok)
+	if !ok {
+		return false
+	}
+	fmt.Println("Email got from Token := ", email)
+	row, err := DB.Query("SELECT userid, usertype FROM user_information WHERE email = ? and deleted = 0", email)
 	if err != nil {
 		panic(err)
 	}
