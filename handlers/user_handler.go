@@ -4,36 +4,33 @@ import (
 	"../library"
 	"../utilities"
 	"encoding/json"
-	"fmt"
 	"net"
 )
 
-func createUserHandler(conn net.Conn, originalMessage []byte) {
-	req := library.CreateUserRequest{}
-	err := json.Unmarshal(originalMessage, &req)
+func createUserHandler(conn net.Conn, data []byte) {
+
+	request := library.CreateUserRequest{}
+	err := json.Unmarshal(data, &request)
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println("req ", req)
 	response := library.CommonResponse{
-		Success:false,
+		Success: false,
 	}
-	fmt.Println("I am here")
-	if Authenticate(req.Email, req.Password, req.Token,0){
-		err := createUser(req.UserEmail, req.UserPassword)
-		fmt.Println("user creation error: ", err )
-		if len(err)>0 {
+
+	if Authenticate(request.Email, request.Password, request.Token, 0) {
+		err := createUser(request.UserEmail, request.UserPassword)
+		if len(err) > 0 {
 			response.Error = err
-			fmt.Println(err)
-		}else{
+		} else {
 			response.Success = true
 		}
 
-	}else{
+	} else {
 		response.Error = "Authentication Error"
 	}
-	fmt.Println("sending response: ", response)
+
 	dataToSend, err := json.Marshal(response)
 	if err != nil {
 		panic(err)
@@ -42,35 +39,31 @@ func createUserHandler(conn net.Conn, originalMessage []byte) {
 	utilities.Write(conn, dataToSend)
 }
 
-func listUserHandler(conn net.Conn, originalMessage []byte) {
-	req := library.ListUserRequest{}
-	err := json.Unmarshal(originalMessage, &req)
+func listUserHandler(conn net.Conn, data []byte) {
+
+	request := library.ListUserRequest{}
+	err := json.Unmarshal(data, &request)
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println("req ", req)
 	response := library.ListUserResponse{
-		Success:false,
+		Success: false,
 	}
 
-
-	if Authenticate(req.Email, req.Password, req.Token,0){
-		list , err := listUser(req.Limit, req.Offset)
-		if len(err)>0 {
+	if Authenticate(request.Email, request.Password, request.Token, 0) {
+		list, err := listUser(request.Limit, request.Offset)
+		if len(err) > 0 {
 			response.Error = err
-			fmt.Println(err)
-		}else{
+		} else {
 			response.Users = append(response.Users, list...)
 			response.Success = true
 		}
 
-	}else{
+	} else {
 		response.Error = "Authentication Error"
 	}
 
-
-	fmt.Println("sending response: ", response)
 	dataToSend, err := json.Marshal(response)
 	if err != nil {
 		panic(err)
@@ -79,30 +72,30 @@ func listUserHandler(conn net.Conn, originalMessage []byte) {
 	utilities.Write(conn, dataToSend)
 }
 
-func deleteUserHandler(conn net.Conn, originalMessage []byte) {
-	req := library.DeleteUserRequest{}
-	err := json.Unmarshal(originalMessage, &req)
+func deleteUserHandler(conn net.Conn, data []byte) {
+
+	request := library.DeleteUserRequest{}
+	err := json.Unmarshal(data, &request)
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println("req ", req)
 	response := library.CommonResponse{
-		Success:false,
+		Success: false,
 	}
-	if Authenticate(req.Email, req.Password, req.Token,0){
-		err := deleteUser(req.UserID)
-		if len(err)>0 {
+	if Authenticate(request.Email, request.Password, request.Token, 0) {
+		err := deleteUser(request.UserID)
+		if len(err) > 0 {
 			response.Error = err
-			fmt.Println(err)
-		}else{
+
+		} else {
 			response.Success = true
 		}
 
-	}else{
+	} else {
 		response.Error = "Authentication Error"
 	}
-	fmt.Println("sending response: ", response)
+
 	dataToSend, err := json.Marshal(response)
 	if err != nil {
 		panic(err)

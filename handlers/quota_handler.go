@@ -4,41 +4,36 @@ import (
 	"../library"
 	"../utilities"
 	"encoding/json"
-	"fmt"
 	"net"
 )
 
-func setQuotaHandler(conn net.Conn, originalMessage []byte) {
-	req := library.SetQuotaRequest{}
-	err := json.Unmarshal(originalMessage, &req)
+func setQuotaHandler(conn net.Conn, data []byte) {
+
+	request := library.SetQuotaRequest{}
+	err := json.Unmarshal(data, &request)
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println("req ", req)
 	response := library.CommonResponse{}
 	response.Success = false
 
-	if Authenticate(req.Email, req.Password, req.Token,req.UserID){
-		err := updateQuota(req.UserID, req.Quota)
-		if len(err)>0 {
+	if Authenticate(request.Email, request.Password, request.Token, request.UserID) {
+		err := updateQuota(request.UserID, request.Quota)
+		if len(err) > 0 {
 			response.Error = err
-			fmt.Println(err)
-		}else{
+		} else {
 			response.Success = true
 		}
 
-	}else{
+	} else {
 		response.Error = "Authentication Error"
 	}
 
-	fmt.Println("sending response: ", response)
 	dataToSend, err := json.Marshal(response)
 	if err != nil {
 		panic(err)
 	}
-
-	fmt.Println("response data: ", dataToSend)
 
 	utilities.Write(conn, dataToSend)
 }

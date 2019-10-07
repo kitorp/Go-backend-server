@@ -4,29 +4,27 @@ import (
 	"../library"
 	"../utilities"
 	"encoding/json"
-	"fmt"
 	"net"
 )
 
-func createResourceHandler(conn net.Conn, originalMessage []byte) {
-	req := library.CreateResourceRequest{}
-	err := json.Unmarshal(originalMessage, &req)
+func createResourceHandler(conn net.Conn, data []byte) {
+
+	request := library.CreateResourceRequest{}
+	err := json.Unmarshal(data, &request)
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println("req ", req)
 	response := library.CommonResponse{
 		Success: false,
 	}
-	if Authenticate(req.Email, req.Password, req.Token, req.UserID) {
-		if !canAddResource(req.UserID) {
+	if Authenticate(request.Email, request.Password, request.Token, request.UserID) {
+		if !canAddResource(request.UserID) {
 			response.Error = "Qouta limit exceeded"
 		} else {
-			err := addResource(req.UserID, req.Resource)
+			err := addResource(request.UserID, request.Resource)
 			if len(err) > 0 {
 				response.Error = err
-				fmt.Println(err)
 			} else {
 				response.Success = true
 			}
@@ -35,7 +33,7 @@ func createResourceHandler(conn net.Conn, originalMessage []byte) {
 	} else {
 		response.Error = "Authentication Error"
 	}
-	fmt.Println("sending response: ", response)
+
 	dataToSend, err := json.Marshal(response)
 	if err != nil {
 		panic(err)
@@ -45,20 +43,19 @@ func createResourceHandler(conn net.Conn, originalMessage []byte) {
 }
 
 func listResourceHandler(conn net.Conn, originalMessage []byte) {
-	req := library.ListResourceRequest{}
-	err := json.Unmarshal(originalMessage, &req)
+	request := library.ListResourceRequest{}
+	err := json.Unmarshal(originalMessage, &request)
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println("req ", req)
 	response := library.ListResourceResponse{}
 
-	if Authenticate(req.Email, req.Password, req.Token, req.UserID) {
-		list, err := listResource(req.UserID)
+	if Authenticate(request.Email, request.Password, request.Token, request.UserID) {
+		list, err := listResource(request.UserID)
 		if len(err) > 0 {
 			response.Error = err
-			fmt.Println(err)
+
 		} else {
 			response.Resource = append(response.Resource, list...)
 		}
@@ -67,7 +64,6 @@ func listResourceHandler(conn net.Conn, originalMessage []byte) {
 		response.Error = "Authentication Error"
 	}
 
-	fmt.Println("sending response: ", response)
 	dataToSend, err := json.Marshal(response)
 	if err != nil {
 		panic(err)
@@ -77,21 +73,20 @@ func listResourceHandler(conn net.Conn, originalMessage []byte) {
 }
 
 func deleteResourceHandler(conn net.Conn, originalMessage []byte) {
-	req := library.DeleteResourceRequest{}
-	err := json.Unmarshal(originalMessage, &req)
+	request := library.DeleteResourceRequest{}
+	err := json.Unmarshal(originalMessage, &request)
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println("req ", req)
 	response := library.CommonResponse{
 		Success: false,
 	}
-	if Authenticate(req.Email, req.Password, req.Token, req.UserID) {
-		err := deleteResource(req.UserID, req.Resource)
+	if Authenticate(request.Email, request.Password, request.Token, request.UserID) {
+		err := deleteResource(request.UserID, request.Resource)
 		if len(err) > 0 {
 			response.Error = err
-			fmt.Println(err)
+
 		} else {
 			response.Success = true
 		}
@@ -99,7 +94,7 @@ func deleteResourceHandler(conn net.Conn, originalMessage []byte) {
 	} else {
 		response.Error = "Authentication Error"
 	}
-	fmt.Println("sending response: ", response)
+
 	dataToSend, err := json.Marshal(response)
 	if err != nil {
 		panic(err)

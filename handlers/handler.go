@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"../utilities"
-	"fmt"
 	"net"
 )
 
@@ -17,9 +16,9 @@ const(
 )
 
 func Handler(conn net.Conn) {
+
 	messageInBytes := utilities.Read(conn)
 	messageType, originalMessage := utilities.DecodeMessage(messageInBytes)
-	fmt.Println("message type: ", messageType)
 
 	if messageType == utilities.Login {
 		loginHandler(conn, originalMessage)
@@ -41,9 +40,8 @@ func Handler(conn net.Conn) {
 }
 
 func Authenticate(email string, password string, token string, userid int) bool {
-	fmt.Println("Start to Authenticate")
+
 	if len(token)>= tokenLength {
-		fmt.Println("here ?")
 		return AuthenticateByToken(token, userid)
 	}else if len(email)>= emailLength && len(password)>=passwordLength {
 		return AuthenticateByEmailPassword(email, password, userid)
