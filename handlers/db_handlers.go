@@ -23,7 +23,7 @@ func GetDB() *sql.DB {
 }
 
 func tryLogin(request library.LoginRequest) (ret library.LoginResponse) {
-
+	ret.Success = false
 	row, err := DB.Query("SELECT password, userid FROM user_information WHERE email = ? and deleted = 0", request.Email)
 	if err != nil {
 		panic(err)
@@ -48,16 +48,13 @@ func tryLogin(request library.LoginRequest) (ret library.LoginResponse) {
 		}
 		ret.UserID = id
 		ret.Token = token
+		ret.Success = true
 		return
 	} else {
 		ret.Error = "Wrong email/password"
 		return
 	}
 
-}
-
-func getHashValue(value string) string {
-	return value
 }
 
 func getToken(email string) (token string, err error) {

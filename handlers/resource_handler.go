@@ -16,7 +16,7 @@ func createResourceHandler(conn net.Conn, originalMessage []byte) {
 	}
 
 	fmt.Println("req ", req)
-	response := library.CreateResourceResponse{
+	response := library.CommonResponse{
 		Success: false,
 	}
 	if Authenticate(req.Email, req.Password, req.Token, req.UserID) {
@@ -84,7 +84,7 @@ func deleteResourceHandler(conn net.Conn, originalMessage []byte) {
 	}
 
 	fmt.Println("req ", req)
-	response := library.DeleteResourceResponse{
+	response := library.CommonResponse{
 		Success: false,
 	}
 	if Authenticate(req.Email, req.Password, req.Token, req.UserID) {

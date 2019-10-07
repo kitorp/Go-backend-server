@@ -16,7 +16,7 @@ func setQuotaHandler(conn net.Conn, originalMessage []byte) {
 	}
 
 	fmt.Println("req ", req)
-	response := library.SetQuotaResponse{}
+	response := library.CommonResponse{}
 	response.Success = false
 
 	if Authenticate(req.Email, req.Password, req.Token,req.UserID){

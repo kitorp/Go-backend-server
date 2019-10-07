@@ -16,7 +16,7 @@ func createUserHandler(conn net.Conn, originalMessage []byte) {
 	}
 
 	fmt.Println("req ", req)
-	response := library.CreateUserResponse{
+	response := library.CommonResponse{
 		Success:false,
 	}
 	fmt.Println("I am here")
@@ -87,7 +87,7 @@ func deleteUserHandler(conn net.Conn, originalMessage []byte) {
 	}
 
 	fmt.Println("req ", req)
-	response := library.DeleteUserResponse{
+	response := library.CommonResponse{
 		Success:false,
 	}
 	if Authenticate(req.Email, req.Password, req.Token,0){

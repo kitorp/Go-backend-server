@@ -6,9 +6,10 @@ type LoginRequest struct {
 }
 
 type LoginResponse struct {
-	Token  string `json:"Token"`
-	UserID int    `json:"UserID"`
-	Error  string `json:"Error"`
+	Success bool   `json:"Success"`
+	Token   string `json:"Token"`
+	UserID  int    `json:"UserID"`
+	Error   string `json:"Error"`
 }
 
 type CreateResourceRequest struct {
@@ -19,9 +20,9 @@ type CreateResourceRequest struct {
 	Resource string `json:"Resource"`
 }
 
-type CreateResourceResponse struct {
+type CommonResponse struct {
 	Success bool   `json:"Success"`
-	Error   string `json:"DebugMsg"`
+	Error   string `json:"Error"`
 }
 
 type ListResourceRequest struct {
@@ -33,7 +34,7 @@ type ListResourceRequest struct {
 
 type ListResourceResponse struct {
 	Resource []string `json:"Resource"`
-	Error    string   `json:"DebugMsg"`
+	Error    string   `json:"Error"`
 }
 
 type DeleteResourceRequest struct {
@@ -44,11 +45,6 @@ type DeleteResourceRequest struct {
 	Resource string `json:"Resource"`
 }
 
-type DeleteResourceResponse struct {
-	Success bool   `json:"Success"`
-	Error   string `json:"DebugMsg"`
-}
-
 type SetQuotaRequest struct {
 	Email    string `json:"Email"`
 	Password string `json:"Password"`
@@ -57,22 +53,12 @@ type SetQuotaRequest struct {
 	Quota    int    `json:"Quota"`
 }
 
-type SetQuotaResponse struct {
-	Success bool   `json:"Success"`
-	Error   string `json:"DebugMsg"`
-}
-
 type CreateUserRequest struct {
 	Email        string `json:"Email"`
 	Password     string `json:"Password"`
 	Token        string `json:"Token"`
 	UserEmail    string `json:"UserEmail"`
 	UserPassword string `json:"UserPassword"`
-}
-
-type CreateUserResponse struct {
-	Success bool   `json:"Success"`
-	Error   string `json:"DebugMsg"`
 }
 
 type ListUserRequest struct {
@@ -94,9 +80,9 @@ type User struct {
 }
 
 type ListUserResponse struct {
-	Success bool   `json:"Success"`
 	Users   []User `json:"User"`
-	Error   string `json:"DebugMsg"`
+	Success bool   `json:"Success"`
+	Error   string `json:"Error"`
 }
 
 type DeleteUserRequest struct {
@@ -104,9 +90,4 @@ type DeleteUserRequest struct {
 	Password string `json:"Password"`
 	Token    string `json:"Token"`
 	UserID   int    `json:"UserID"`
-}
-
-type DeleteUserResponse struct {
-	Success bool   `json:"Success"`
-	Error   string `json:"DebugMsg"`
 }

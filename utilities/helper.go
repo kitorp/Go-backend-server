@@ -1,7 +1,10 @@
 package utilities
 
 import (
+	"bufio"
 	"encoding/binary"
+	"fmt"
+	"net"
 )
 
 const (
@@ -15,18 +18,41 @@ const (
 	DeleteUser     uint32 = 8
 )
 
+const(
+	maximumPacketSizeInByte uint32 = 1024
+)
+
 func EncodeMessage(messageType uint32, data []byte) (message []byte) {
+
 	firstByte := make([]byte, 4)
-
-
 	binary.BigEndian.PutUint32(firstByte, uint32(messageType))
 	message = append(firstByte, data...)
-
 	return
 }
 
 func DecodeMessage(message []byte) (messageType uint32, data []byte) {
+
 	messageType = binary.BigEndian.Uint32(message[:4])
 	data = message[4:]
 	return
+}
+
+func Read(conn net.Conn) (data []byte) {
+
+	messageInBytes := make([]byte, maximumPacketSizeInByte)
+	length, err := bufio.NewReader(conn).Read(messageInBytes)
+	if err != nil {
+		fmt.Println(err)
+		panic(" bufio read err")
+	}
+	return messageInBytes[:length]
+
+}
+
+func Write(conn net.Conn, data []byte) {
+
+	_, err := conn.Write(data)
+	if err != nil {
+		panic("data write error")
+	}
 }
