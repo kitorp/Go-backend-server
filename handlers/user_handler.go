@@ -16,24 +16,18 @@ func createUserHandler(conn net.Conn, originalMessage []byte) {
 	}
 
 	fmt.Println("req ", req)
-	response := library.CreateUserResponse{
-		Email:        req.Email,
-		Password:     req.Password,
-		Token:        req.Token,
-		UserEmail:    req.UserEmail,
-		UserPassword: req.UserPassword,
-	}
-	if req.Email == "Sprotik" && req.Password == "123" {
-		fmt.Println("correct if")
-		response.UserID = 999
-		response.Success = true
+	response := library.CreateUserResponse{}
+	if Authenticate(req.Email, req.Password, req.Token,0){
+		err := createUser(req.UserEmail, req.UserPassword)
+		if len(err)>0 {
+			response.Error = err
+			fmt.Println(err)
+		}else{
+			response.Success = true
+		}
 
-	} else if req.Token == "wow" {
-		response.UserID = 999
-		response.Success = true
-	} else {
-		response.Success = false
-		response.Error = "authentication error"
+	}else{
+		response.Error = "Authentication Error"
 	}
 	fmt.Println("sending response: ", response)
 	dataToSend, err := json.Marshal(response)
@@ -55,20 +49,25 @@ func listUserHandler(conn net.Conn, originalMessage []byte) {
 
 	fmt.Println("req ", req)
 	response := library.ListUserResponse{
-		Email:    req.Email,
-		Password: req.Password,
-		Token:    req.Token,
+		Success:false,
 	}
-	var all []library.User
-	if req.Email == "Sprotik" && req.Password == "123" {
-		fmt.Println("correct if")
-		response.Users = append(response.Users, all...)
 
-	} else if req.Token == "wow" {
-		response.Users = append(response.Users, all...)
-	} else {
-		response.Error = "authentication error"
+
+	if Authenticate(req.Email, req.Password, req.Token,0){
+		list , err := listUser(req.Limit, req.Offset)
+		if len(err)>0 {
+			response.Error = err
+			fmt.Println(err)
+		}else{
+			response.Users = append(response.Users, list...)
+			response.Success = true
+		}
+
+	}else{
+		response.Error = "Authentication Error"
 	}
+
+
 	fmt.Println("sending response: ", response)
 	dataToSend, err := json.Marshal(response)
 	if err != nil {
@@ -89,20 +88,19 @@ func deleteUserHandler(conn net.Conn, originalMessage []byte) {
 
 	fmt.Println("req ", req)
 	response := library.DeleteUserResponse{
-		Email:    req.Email,
-		Password: req.Password,
-		Token:    req.Token,
-		UserID:   req.UserID,
+		Success:false,
 	}
-	if req.Email == "Sprotik" && req.Password == "123" {
-		fmt.Println("correct if")
-		response.Success = true
+	if Authenticate(req.Email, req.Password, req.Token,0){
+		err := deleteUser(req.UserID)
+		if len(err)>0 {
+			response.Error = err
+			fmt.Println(err)
+		}else{
+			response.Success = true
+		}
 
-	} else if req.Token == "wow" {
-		response.Success = true
-	} else {
-		response.Success = false
-		response.Error = "authentication error"
+	}else{
+		response.Error = "Authentication Error"
 	}
 	fmt.Println("sending response: ", response)
 	dataToSend, err := json.Marshal(response)

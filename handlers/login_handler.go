@@ -17,16 +17,7 @@ func loginHandler(conn net.Conn, originalMessage []byte) {
 	}
 
 	fmt.Println("req ", req)
-	response := library.LoginResponse{
-		Email:    req.Email,
-		Password: req.Password,
-	}
-	if req.Email == "Sprotik" && req.Password == "123" {
-		response.Token = "wow"
-
-	} else {
-		response.Error = "no record"
-	}
+	response := tryLogin(req)
 	fmt.Println("sending response: ", response)
 	dataToSend, err := json.Marshal(response)
 	if err != nil {

@@ -17,20 +17,19 @@ func createResourceHandler(conn net.Conn, originalMessage []byte) {
 
 	fmt.Println("req ", req)
 	response := library.CreateResourceResponse{
-		Email:    req.Email,
-		Password: req.Password,
-		Token:    req.Token,
-		Resource: req.Resource,
+		Success:false,
 	}
-	if req.Email == "Sprotik" && req.Password == "123" {
-		fmt.Println("correct if")
-		response.Success = true
+	if Authenticate(req.Email, req.Password, req.Token, req.UserID){
+		err := addResource(req.UserID, req.Resource)
+		if len(err)>0 {
+			response.Error = err
+			fmt.Println(err)
+		}else{
+			response.Success = true
+		}
 
-	} else if req.Token == "wow" {
-		response.Success = true
-	} else {
-		response.Success = false
-		response.Error = "authentication error"
+	}else{
+		response.Error = "Authentication Error"
 	}
 	fmt.Println("sending response: ", response)
 	dataToSend, err := json.Marshal(response)
@@ -51,28 +50,26 @@ func listResourceHandler(conn net.Conn, originalMessage []byte) {
 	}
 
 	fmt.Println("req ", req)
-	response := library.ListResourceResponse{
-		Email:    req.Email,
-		Password: req.Password,
-		Token:    req.Token,
-	}
-	var all []string
-	all = append(all, "abc","dfs", "dfsf")
-	if req.Email == "Sprotik" && req.Password == "123" {
-		fmt.Println("correct if")
-		response.Resource = append(response.Resource, all...)
+	response := library.ListResourceResponse{}
 
-	} else if req.Token == "wow" {
-		response.Resource = append(response.Resource, all...)
-	} else {
-		response.Error = "authentication error"
+	if Authenticate(req.Email, req.Password, req.Token, req.UserID){
+		list, err := listResource(req.UserID)
+		if len(err)>0 {
+			response.Error = err
+			fmt.Println(err)
+		}else{
+			response.Resource = append(response.Resource, list...)
+		}
+
+	}else{
+		response.Error = "Authentication Error"
 	}
+
 	fmt.Println("sending response: ", response)
 	dataToSend, err := json.Marshal(response)
 	if err != nil {
 		panic(err)
 	}
-
 	fmt.Println("response data: ", dataToSend)
 
 	utilities.Write(conn, dataToSend)
@@ -87,20 +84,19 @@ func deleteResourceHandler(conn net.Conn, originalMessage []byte) {
 
 	fmt.Println("req ", req)
 	response := library.DeleteResourceResponse{
-		Email:    req.Email,
-		Password: req.Password,
-		Token:    req.Token,
-		Resource: req.Resource,
+		Success:false,
 	}
-	if req.Email == "Sprotik" && req.Password == "123" {
-		fmt.Println("correct if")
-		response.Success = true
+	if Authenticate(req.Email, req.Password, req.Token, req.UserID){
+		err := deleteResource(req.UserID, req.Resource)
+		if len(err)>0 {
+			response.Error = err
+			fmt.Println(err)
+		}else{
+			response.Success = true
+		}
 
-	} else if req.Token == "wow" {
-		response.Success = true
-	} else {
-		response.Success = false
-		response.Error = "authentication error"
+	}else{
+		response.Error = "Authentication Error"
 	}
 	fmt.Println("sending response: ", response)
 	dataToSend, err := json.Marshal(response)

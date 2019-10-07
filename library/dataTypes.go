@@ -6,39 +6,32 @@ type LoginRequest struct {
 }
 
 type LoginResponse struct {
-	Email    string `json:"Email"`
-	Password string `json:"Password"`
-	Token    string `json:"Token"`
-	UserId   int    `json:"UserId"`
-	Error    string `json:"Error"`
+	Token  string `json:"Token"`
+	UserID int    `json:"UserID"`
+	Error  string `json:"Error"`
 }
 
 type CreateResourceRequest struct {
 	Email    string `json:"Email"`
 	Password string `json:"Password"`
 	Token    string `json:"Token"`
+	UserID   int    `json:"UserID"`
 	Resource string `json:"Resource"`
 }
 
 type CreateResourceResponse struct {
-	Email    string `json:"Email"`
-	Password string `json:"Password"`
-	Token    string `json:"Token"`
-	Resource string `json:"Resource"`
-	Success  bool   `json:"Success"`
-	Error    string `json:"DebugMsg"`
+	Success bool   `json:"Success"`
+	Error   string `json:"DebugMsg"`
 }
 
 type ListResourceRequest struct {
 	Email    string `json:"Email"`
 	Password string `json:"Password"`
 	Token    string `json:"Token"`
+	UserID   int    `json:"UserID"`
 }
 
 type ListResourceResponse struct {
-	Email    string   `json:"Email"`
-	Password string   `json:"Password"`
-	Token    string   `json:"Token"`
 	Resource []string `json:"Resource"`
 	Error    string   `json:"DebugMsg"`
 }
@@ -47,16 +40,13 @@ type DeleteResourceRequest struct {
 	Email    string `json:"Email"`
 	Password string `json:"Password"`
 	Token    string `json:"Token"`
+	UserID   int    `json:"UserID"`
 	Resource string `json:"Resource"`
 }
 
 type DeleteResourceResponse struct {
-	Email    string `json:"Email"`
-	Password string `json:"Password"`
-	Token    string `json:"Token"`
-	Resource string `json:"Resource"`
-	Success  bool   `json:"Success"`
-	Error    string `json:"DebugMsg"`
+	Success bool   `json:"Success"`
+	Error   string `json:"DebugMsg"`
 }
 
 type SetQuotaRequest struct {
@@ -68,13 +58,8 @@ type SetQuotaRequest struct {
 }
 
 type SetQuotaResponse struct {
-	Email    string `json:"Email"`
-	Password string `json:"Password"`
-	Token    string `json:"Token"`
-	UserID   int    `json:"UserID"`
-	Quota    int    `json:"Quota"`
-	Success  bool   `json:"Success"`
-	Error    string `json:"DebugMsg"`
+	Success bool   `json:"Success"`
+	Error   string `json:"DebugMsg"`
 }
 
 type CreateUserRequest struct {
@@ -86,35 +71,32 @@ type CreateUserRequest struct {
 }
 
 type CreateUserResponse struct {
-	Email        string `json:"Email"`
-	Password     string `json:"Password"`
-	Token        string `json:"Token"`
-	UserEmail    string `json:"UserEmail"`
-	UserPassword string `json:"UserPassword"`
-	UserID       int    `json:"UserID"`
-	Success      bool   `json:"Success"`
-	Error        string `json:"DebugMsg"`
+	Success bool   `json:"Success"`
+	Error   string `json:"DebugMsg"`
 }
 
 type ListUserRequest struct {
 	Email    string `json:"Email"`
 	Password string `json:"Password"`
 	Token    string `json:"Token"`
+	Limit    int    `json:"Limit"`
+	Offset   int    `json:"Offset"`
 }
 
 type User struct {
-	UserID   int      `json:"UserID"`
-	Email    string   `json:"Email"`
-	Quota    int      `json:"Quota"`
-	Resource []string `json:"Resource"`
+	UserID        int      `json:"UserID"`
+	Email         string   `json:"Email"`
+	UserType      int      `json:"UserType"`
+	Deleted       int      `json:"Deleted"`
+	Resource      []string `json:"Resource"`
+	ResourceCount int      `json:"ResourceCount"`
+	Quota         int      `json:"Quota"`
 }
 
 type ListUserResponse struct {
-	Email    string `json:"Email"`
-	Password string `json:"Password"`
-	Token    string `json:"Token"`
-	Users    []User `json:"User"`
-	Error    string `json:"DebugMsg"`
+	Success bool   `json:"Success"`
+	Users   []User `json:"User"`
+	Error   string `json:"DebugMsg"`
 }
 
 type DeleteUserRequest struct {
@@ -125,10 +107,6 @@ type DeleteUserRequest struct {
 }
 
 type DeleteUserResponse struct {
-	Email    string `json:"Email"`
-	Password string `json:"Password"`
-	Token    string `json:"Token"`
-	UserID   int    `json:"UserID"`
-	Success  bool   `json:"Success"`
-	Error    string `json:"DebugMsg"`
+	Success bool   `json:"Success"`
+	Error   string `json:"DebugMsg"`
 }

@@ -6,6 +6,16 @@ import (
 	"net"
 )
 
+const(
+	passwordLength = 6
+	emailLength = 3
+	tokenLength = 6
+
+
+	userAdmin = 1
+	userGeneral = 0
+)
+
 func Handler(conn net.Conn) {
 	messageInBytes := utilities.Read(conn)
 	messageType, originalMessage := utilities.DecodeMessage(messageInBytes)
@@ -28,4 +38,16 @@ func Handler(conn net.Conn) {
 	} else if messageType == utilities.DeleteUser {
 		deleteUserHandler(conn, originalMessage)
 	}
+}
+
+func Authenticate(email string, password string, token string, userid int) bool {
+	if len(token)>= tokenLength {
+		return AuthenticateByToken(token, userid)
+	}else if len(email)>= emailLength && len(password)>=passwordLength {
+		return AuthenticateByEmailPassword(email, password, userid)
+	}else{
+		return false
+
+	}
+
 }
