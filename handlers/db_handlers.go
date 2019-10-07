@@ -40,7 +40,7 @@ func tryLogin(request library.LoginRequest) (ret library.LoginResponse) {
 	}
 
 
-	if passwordMatch(request.Password, L) {
+	if ComparePasswords(L, request.Password) {
 		token, err := getToken(request.Email)
 		if err != nil {
 			ret.Error = err.Error()
@@ -54,11 +54,6 @@ func tryLogin(request library.LoginRequest) (ret library.LoginResponse) {
 		return
 	}
 
-}
-
-func passwordMatch(givenPassword string, hashedPassword string) bool {
-	hashedValue := getHashValue(givenPassword)
-	return hashedValue == hashedPassword
 }
 
 func getHashValue(value string) string {
@@ -255,7 +250,7 @@ func deleteResource(userId int, resource string) (error string) {
 }
 
 func createUser(email string, password string) (error string) {
-	hashedValue := getHashValue(password);
+	hashedValue := HashAndSalt(password)
 	_, err := DB.Exec("insert into user_information(email, password) values(?, ?)", email, hashedValue)
 	if err != nil {
 
