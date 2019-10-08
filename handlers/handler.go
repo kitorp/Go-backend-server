@@ -2,52 +2,65 @@ package handlers
 
 import (
 	"../utilities"
+	"github.com/apsdehal/go-logger"
 	"net"
 )
 
-const(
+const (
 	passwordLength = 1
-	emailLength = 1
-	tokenLength = 1
+	emailLength    = 1
+	tokenLength    = 1
 
-
-	userAdmin = 1
+	userAdmin   = 1
 	userGeneral = 0
 )
 
+var (
+	Log *logger.Logger
+)
+
+func GetLogger() *logger.Logger {
+	return Log
+}
+
 func Handler(conn net.Conn) {
 
+	log := GetLogger()
+
 	messageInBytes := utilities.Read(conn)
-	messageType, originalMessage := utilities.DecodeMessage(messageInBytes)
+	messageType, data := utilities.DecodeMessage(messageInBytes)
+
+	log.InfoF("Request type: %d", messageType)
 
 	if messageType == utilities.Login {
-		loginHandler(conn, originalMessage)
+		loginHandler(conn, data)
 	} else if messageType == utilities.CreateResource {
-		createResourceHandler(conn, originalMessage)
+		createResourceHandler(conn, data)
 	} else if messageType == utilities.ListResource {
-		listResourceHandler(conn, originalMessage)
+		listResourceHandler(conn, data)
 	} else if messageType == utilities.DeleteResource {
-		deleteResourceHandler(conn, originalMessage)
+		deleteResourceHandler(conn, data)
 	} else if messageType == utilities.SetQuota {
-		setQuotaHandler(conn, originalMessage)
-	} else if messageType == utilities.CreateUser{
-		createUserHandler(conn, originalMessage)
-	} else if messageType == utilities.ListUser{
-		listUserHandler(conn, originalMessage)
+		setQuotaHandler(conn, data)
+	} else if messageType == utilities.CreateUser {
+		createUserHandler(conn, data)
+	} else if messageType == utilities.ListUser {
+		listUserHandler(conn, data)
 	} else if messageType == utilities.DeleteUser {
-		deleteUserHandler(conn, originalMessage)
+		deleteUserHandler(conn, data)
+	} else {
+		return
 	}
 }
 
 func Authenticate(email string, password string, token string, userid int) bool {
 
-	if len(token)>= tokenLength {
+	if len(token) >= tokenLength {
 		return AuthenticateByToken(token, userid)
-	}else if len(email)>= emailLength && len(password)>=passwordLength {
+	} else if len(email) >= emailLength && len(password) >= passwordLength {
 		return AuthenticateByEmailPassword(email, password, userid)
-	}else{
+	} else {
 		return false
-
 	}
 
 }

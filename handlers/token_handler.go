@@ -27,23 +27,26 @@ func IssueToken(username string, expiraryTime time.Duration) string {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString(jwtKey)
 	if err != nil {
+		Log.WarningF("Error Issuing Token. ", err.Error())
 		return "internal error"
 	}
 
 	return tokenString
 }
 
-func VerifyToken(token string) (bool, string) {
+func VerifyToken(tokenString string) (bool, string) {
 
 	claims := &Claims{}
 
-	tkn, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 		return jwtKey, nil
 	})
-	if !tkn.Valid {
+	if !token.Valid {
+		Log.WarningF("Token Not Valid.")
 		return false, "Status Unauthorized"
 	}
 	if err != nil {
+		Log.WarningF("Token Error.", err.Error())
 		if err == jwt.ErrSignatureInvalid {
 			return false, "Status Unauthorized"
 		}

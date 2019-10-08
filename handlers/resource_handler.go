@@ -12,7 +12,8 @@ func createResourceHandler(conn net.Conn, data []byte) {
 	request := library.CreateResourceRequest{}
 	err := json.Unmarshal(data, &request)
 	if err != nil {
-		panic(err)
+		Log.WarningF("Json Unmarshal Error. ", err.Error())
+		return
 	}
 
 	response := library.CommonResponse{
@@ -23,8 +24,8 @@ func createResourceHandler(conn net.Conn, data []byte) {
 			response.Error = "Qouta limit exceeded"
 		} else {
 			err := addResource(request.UserID, request.Resource)
-			if len(err) > 0 {
-				response.Error = err
+			if err != nil {
+				response.Error = err.Error()
 			} else {
 				response.Success = true
 			}
@@ -36,7 +37,8 @@ func createResourceHandler(conn net.Conn, data []byte) {
 
 	dataToSend, err := json.Marshal(response)
 	if err != nil {
-		panic(err)
+		Log.WarningF("Json Marshal Error. ", err.Error())
+		return
 	}
 
 	utilities.Write(conn, dataToSend)
@@ -46,15 +48,16 @@ func listResourceHandler(conn net.Conn, originalMessage []byte) {
 	request := library.ListResourceRequest{}
 	err := json.Unmarshal(originalMessage, &request)
 	if err != nil {
-		panic(err)
+		Log.WarningF("Json Unmarshal Error. ", err.Error())
+		return
 	}
 
 	response := library.ListResourceResponse{}
 
 	if Authenticate(request.Email, request.Password, request.Token, request.UserID) {
 		list, err := listResource(request.UserID)
-		if len(err) > 0 {
-			response.Error = err
+		if err!= nil {
+			response.Error = err.Error()
 
 		} else {
 			response.Resource = append(response.Resource, list...)
@@ -66,7 +69,8 @@ func listResourceHandler(conn net.Conn, originalMessage []byte) {
 
 	dataToSend, err := json.Marshal(response)
 	if err != nil {
-		panic(err)
+		Log.WarningF("Json Marshal Error. ", err.Error())
+		return
 	}
 
 	utilities.Write(conn, dataToSend)
@@ -76,7 +80,8 @@ func deleteResourceHandler(conn net.Conn, originalMessage []byte) {
 	request := library.DeleteResourceRequest{}
 	err := json.Unmarshal(originalMessage, &request)
 	if err != nil {
-		panic(err)
+		Log.WarningF("Json Unmarshal Error. ", err.Error())
+		return
 	}
 
 	response := library.CommonResponse{
@@ -84,8 +89,8 @@ func deleteResourceHandler(conn net.Conn, originalMessage []byte) {
 	}
 	if Authenticate(request.Email, request.Password, request.Token, request.UserID) {
 		err := deleteResource(request.UserID, request.Resource)
-		if len(err) > 0 {
-			response.Error = err
+		if err!= nil {
+			response.Error = err.Error()
 
 		} else {
 			response.Success = true
@@ -97,7 +102,8 @@ func deleteResourceHandler(conn net.Conn, originalMessage []byte) {
 
 	dataToSend, err := json.Marshal(response)
 	if err != nil {
-		panic(err)
+		Log.WarningF("Json Marshal Error. ", err.Error())
+		return
 	}
 
 	utilities.Write(conn, dataToSend)
