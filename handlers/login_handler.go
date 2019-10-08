@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net"
 	"time"
 
@@ -18,15 +17,12 @@ func loginHandler(conn net.Conn, originalMessage []byte) {
 		return
 	}
 
-	fmt.Println("Request: ", request)
-
 	response := tryLogin(request)
 	dataToSend, err := json.Marshal(response)
 	if err != nil {
 		Log.WarningF("Json Marshal Error. %s", err.Error())
 		return
 	}
-	fmt.Println("Response: ", response)
 
 	utilities.Write(conn, dataToSend)
 }
@@ -86,26 +82,32 @@ func authenticateUserByEmailPassword(email string, password string, userId int) 
 	}
 	response := tryLogin(req)
 
-	if len(response.Error) == 0 {
-		return authenticateUserByToken(response.Token, userId)
+	if len(response.Error) > 0 {
+		return false
 	}
-	return false
+
+	return canUserExecuteRequestOnThisID(email, response.UserID)
+
 }
 
-func authenticateUserByToken(token string, userid int) bool {
+func authenticateUserByToken(token string, userId int) bool {
 
-	ok, email := VerifyToken(token)
+	ok, email := verifyTokenAndGetEmail(token)
 	if !ok {
 		Log.InfoF("Token Verification False for email: %s", email)
 		return false
 	}
+	return canUserExecuteRequestOnThisID(email, userId)
+
+}
+
+func canUserExecuteRequestOnThisID(email string, userId int) bool {
 
 	id, userType, err := getUserIdAndUserTypeFromDB(email)
 	if err != nil {
 		return false
 	}
-
-	if userType == userAdmin || id == userid {
+	if userType == userAdmin || id == userId {
 		return true
 	}
 	return false

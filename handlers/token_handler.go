@@ -9,7 +9,7 @@ import (
 var jwtKey = []byte("my_secret_key")
 
 type Claims struct {
-	Username string
+	Email string
 	jwt.StandardClaims
 }
 
@@ -18,7 +18,7 @@ func IssueToken(username string, expiraryTime time.Duration) string {
 	expirationTime := time.Now().Add(expiraryTime)
 
 	claims := &Claims{
-		Username: username,
+		Email: username,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},
@@ -34,7 +34,7 @@ func IssueToken(username string, expiraryTime time.Duration) string {
 	return tokenString
 }
 
-func VerifyToken(tokenString string) (bool, string) {
+func verifyTokenAndGetEmail(tokenString string) (IsCorrectToken bool, email string) {
 
 	claims := &Claims{}
 
@@ -53,5 +53,5 @@ func VerifyToken(tokenString string) (bool, string) {
 		return false, "Status Bad Request"
 	}
 
-	return true, claims.Username
+	return true, claims.Email
 }
