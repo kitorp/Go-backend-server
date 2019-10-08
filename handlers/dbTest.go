@@ -3,7 +3,7 @@ package handlers
 import (
 	"fmt"
 
-	"../library"
+	"../utilities"
 )
 
 func DBTest() {
@@ -21,7 +21,7 @@ func DBTest() {
 }
 
 func tryLoginTest1() {
-	req := library.LoginRequest{
+	req := utilities.LoginRequest{
 		Email:    "protik2095@gmail.com",
 		Password: "123",
 	}

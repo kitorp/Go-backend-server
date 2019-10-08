@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"time"
 
-	"../library"
+	"../utilities"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -24,7 +24,7 @@ func GetDB() *sql.DB {
 	return Db
 }
 
-func tryLogin(request library.LoginRequest) (response library.LoginResponse) {
+func tryLogin(request utilities.LoginRequest) (response utilities.LoginResponse) {
 
 	response.Success = false
 	row, err := DB.Query("SELECT password, userid FROM user_information WHERE email = ? and deleted = 0", request.Email)
@@ -111,7 +111,7 @@ func AuthenticateByToken(token string, userid int) bool {
 }
 
 func AuthenticateByEmailPassword(email string, password string, userid int) bool {
-	req := library.LoginRequest{
+	req := utilities.LoginRequest{
 		Email:    email,
 		Password: password,
 	}
@@ -273,7 +273,7 @@ func createUser(email string, password string, userType int) (err error) {
 
 }
 
-func listUser(limit int, offset int) (list []library.User, err error) {
+func listUser(limit int, offset int) (list []utilities.User, err error) {
 	row, err := DB.Query("SELECT userid, email, usertype, deleted,resource, resource_count, qouta FROM user_information limit ? , ?  ", offset, limit)
 	if err != nil {
 		Log.WarningF("Error DB Query. ", err.Error())
@@ -282,7 +282,7 @@ func listUser(limit int, offset int) (list []library.User, err error) {
 
 	data := make([]byte, 1024)
 	for row.Next() {
-		cur := library.User{}
+		cur := utilities.User{}
 		err = row.Scan(&cur.UserID,
 			&cur.Email,
 			&cur.UserType,

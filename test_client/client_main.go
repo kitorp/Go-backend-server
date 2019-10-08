@@ -1,7 +1,6 @@
 package main
 
 import (
-	"../library"
 	"../utilities"
 	"encoding/json"
 	"fmt"
@@ -22,8 +21,6 @@ func main() {
 	//listUserTest()
 	//deleteUserResponseTest()
 
-
-
 }
 
 func loginTest() {
@@ -31,7 +28,7 @@ func loginTest() {
 	conn, _ := net.Dial("tcp", "127.0.0.1:8081")
 	defer conn.Close()
 
-	crd := library.LoginRequest{
+	crd := utilities.LoginRequest{
 		Email:    "sprotik@gmail.com",
 		Password: "qwe",
 	}
@@ -42,11 +39,11 @@ func loginTest() {
 	}
 	dataToSend := utilities.EncodeMessage(utilities.Login, a)
 
-	utilities.Write(conn,dataToSend)
+	utilities.Write(conn, dataToSend)
 
 	receivedDatainBytes := utilities.Read(conn)
 
-	receivedData := library.LoginResponse{}
+	receivedData := utilities.LoginResponse{}
 
 	err = json.Unmarshal(receivedDatainBytes, &receivedData)
 	if err != nil {
@@ -55,19 +52,17 @@ func loginTest() {
 
 	fmt.Println(receivedData)
 
-
 }
 
-
-func createResourceTest1(){
+func createResourceTest1() {
 	conn, _ := net.Dial("tcp", "127.0.0.1:8081")
 	defer conn.Close()
 
-	crd := library.CreateResourceRequest{
+	crd := utilities.CreateResourceRequest{
 		Email:    "sprotik@gmail.com",
 		Password: "qwe",
 		Token:    "",
-		UserID: 1000000,
+		UserID:   1000000,
 		Resource: "your life not my rules",
 	}
 
@@ -77,12 +72,12 @@ func createResourceTest1(){
 	}
 	dataToSend := utilities.EncodeMessage(utilities.CreateResource, a)
 
-	utilities.Write(conn,dataToSend)
+	utilities.Write(conn, dataToSend)
 
 	receivedDatainBytes := utilities.Read(conn)
 
 	fmt.Println("In Byte: ", receivedDatainBytes)
-	receivedData := library.CommonResponse{}
+	receivedData := utilities.CommonResponse{}
 
 	err = json.Unmarshal(receivedDatainBytes, &receivedData)
 	if err != nil {
@@ -93,14 +88,12 @@ func createResourceTest1(){
 
 }
 
-
-
-func listResourceTest1(){
+func listResourceTest1() {
 	conn, _ := net.Dial("tcp", "127.0.0.1:8081")
 	defer conn.Close()
 
-	crd := library.ListResourceRequest{
-		Token:    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6InByb3RpazIwOTVAZ21haWwuY29tIiwiZXhwIjoxNTcwNTQ5NzU5fQ.324xoWAPu0LHXNHYNIKkk6VVSAqG20Vy794zh-iuQkM",
+	crd := utilities.ListResourceRequest{
+		Token:  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6InByb3RpazIwOTVAZ21haWwuY29tIiwiZXhwIjoxNTcwNTQ5NzU5fQ.324xoWAPu0LHXNHYNIKkk6VVSAqG20Vy794zh-iuQkM",
 		UserID: 1000000,
 	}
 
@@ -110,12 +103,12 @@ func listResourceTest1(){
 	}
 	dataToSend := utilities.EncodeMessage(utilities.ListResource, a)
 
-	utilities.Write(conn,dataToSend)
+	utilities.Write(conn, dataToSend)
 
 	receivedDatainBytes := utilities.Read(conn)
 
 	fmt.Println("In Byte: ", receivedDatainBytes)
-	receivedData := library.ListResourceResponse{}
+	receivedData := utilities.ListResourceResponse{}
 
 	err = json.Unmarshal(receivedDatainBytes, &receivedData)
 	if err != nil {
@@ -125,14 +118,14 @@ func listResourceTest1(){
 	fmt.Println(receivedData)
 }
 
-func listResourceTest2(){
+func listResourceTest2() {
 	conn, _ := net.Dial("tcp", "127.0.0.1:8081")
 	defer conn.Close()
 
-	crd := library.ListResourceRequest{
+	crd := utilities.ListResourceRequest{
 		Email:    "protik2095@gmail.com",
 		Password: "123",
-		UserID: 1000001,
+		UserID:   1000001,
 	}
 
 	a, err := json.Marshal(crd)
@@ -141,12 +134,12 @@ func listResourceTest2(){
 	}
 	dataToSend := utilities.EncodeMessage(utilities.ListResource, a)
 
-	utilities.Write(conn,dataToSend)
+	utilities.Write(conn, dataToSend)
 
 	receivedDatainBytes := utilities.Read(conn)
 
 	fmt.Println("In Byte: ", receivedDatainBytes)
-	receivedData := library.ListResourceResponse{}
+	receivedData := utilities.ListResourceResponse{}
 
 	err = json.Unmarshal(receivedDatainBytes, &receivedData)
 	if err != nil {
@@ -156,16 +149,15 @@ func listResourceTest2(){
 	fmt.Println(receivedData)
 }
 
-
-func deleteResourceTest(){
+func deleteResourceTest() {
 	conn, _ := net.Dial("tcp", "127.0.0.1:8081")
 	defer conn.Close()
 
-	crd := library.DeleteResourceRequest{
+	crd := utilities.DeleteResourceRequest{
 		Email:    "protik2095@gmail.com",
 		Password: "123",
-		UserID: 1000001,
-		Resource:"should work",
+		UserID:   1000001,
+		Resource: "should work",
 	}
 
 	a, err := json.Marshal(crd)
@@ -174,12 +166,12 @@ func deleteResourceTest(){
 	}
 	dataToSend := utilities.EncodeMessage(utilities.DeleteResource, a)
 
-	utilities.Write(conn,dataToSend)
+	utilities.Write(conn, dataToSend)
 
 	receivedDatainBytes := utilities.Read(conn)
 
 	fmt.Println("In Byte: ", receivedDatainBytes)
-	receivedData := library.CommonResponse{}
+	receivedData := utilities.CommonResponse{}
 
 	err = json.Unmarshal(receivedDatainBytes, &receivedData)
 	if err != nil {
@@ -189,17 +181,15 @@ func deleteResourceTest(){
 	fmt.Println(receivedData)
 }
 
-
-
-func setQoutaTest(){
+func setQoutaTest() {
 	conn, _ := net.Dial("tcp", "127.0.0.1:8081")
 	defer conn.Close()
 
-	crd := library.SetQuotaRequest{
+	crd := utilities.SetQuotaRequest{
 		Email:    "protik2095@gmail.com",
 		Password: "123",
-		UserID: 1000001,
-		Quota: 10,
+		UserID:   1000001,
+		Quota:    10,
 	}
 
 	a, err := json.Marshal(crd)
@@ -208,12 +198,12 @@ func setQoutaTest(){
 	}
 	dataToSend := utilities.EncodeMessage(utilities.SetQuota, a)
 
-	utilities.Write(conn,dataToSend)
+	utilities.Write(conn, dataToSend)
 
 	receivedDatainBytes := utilities.Read(conn)
 
 	fmt.Println("In Byte: ", receivedDatainBytes)
-	receivedData := library.CommonResponse{}
+	receivedData := utilities.CommonResponse{}
 
 	err = json.Unmarshal(receivedDatainBytes, &receivedData)
 	if err != nil {
@@ -223,16 +213,15 @@ func setQoutaTest(){
 	fmt.Println(receivedData)
 }
 
-
-func createUserTest(){
+func createUserTest() {
 	conn, _ := net.Dial("tcp", "127.0.0.1:8081")
 	defer conn.Close()
 
-	crd := library.CreateUserRequest{
-		Email:    "protik2095@gmail.com",
-		Password: "123",
-		UserEmail: "arif@gmail.com",
-		UserPassword:"baba",
+	crd := utilities.CreateUserRequest{
+		Email:        "protik2095@gmail.com",
+		Password:     "123",
+		UserEmail:    "arif@gmail.com",
+		UserPassword: "baba",
 	}
 
 	a, err := json.Marshal(crd)
@@ -241,12 +230,12 @@ func createUserTest(){
 	}
 	dataToSend := utilities.EncodeMessage(utilities.CreateUser, a)
 
-	utilities.Write(conn,dataToSend)
+	utilities.Write(conn, dataToSend)
 
 	receivedDatainBytes := utilities.Read(conn)
 
 	fmt.Println("In Byte: ", receivedDatainBytes)
-	receivedData := library.CommonResponse{}
+	receivedData := utilities.CommonResponse{}
 
 	err = json.Unmarshal(receivedDatainBytes, &receivedData)
 	if err != nil {
@@ -257,15 +246,15 @@ func createUserTest(){
 
 }
 
-func listUserTest(){
+func listUserTest() {
 	conn, _ := net.Dial("tcp", "127.0.0.1:8081")
 	defer conn.Close()
 
-	crd := library.ListUserRequest{
+	crd := utilities.ListUserRequest{
 		Email:    "protik2095@gmail.com",
 		Password: "123",
-		Limit:2,
-		Offset:1,
+		Limit:    2,
+		Offset:   1,
 	}
 
 	a, err := json.Marshal(crd)
@@ -274,12 +263,12 @@ func listUserTest(){
 	}
 	dataToSend := utilities.EncodeMessage(utilities.ListUser, a)
 
-	utilities.Write(conn,dataToSend)
+	utilities.Write(conn, dataToSend)
 
 	receivedDatainBytes := utilities.Read(conn)
 
 	fmt.Println("In Byte: ", receivedDatainBytes)
-	receivedData := library.ListUserResponse{}
+	receivedData := utilities.ListUserResponse{}
 
 	err = json.Unmarshal(receivedDatainBytes, &receivedData)
 	if err != nil {
@@ -289,15 +278,14 @@ func listUserTest(){
 	fmt.Println(receivedData)
 }
 
-
-func deleteUserResponseTest(){
+func deleteUserResponseTest() {
 	conn, _ := net.Dial("tcp", "127.0.0.1:8081")
 	defer conn.Close()
 
-	crd := library.DeleteUserRequest{
+	crd := utilities.DeleteUserRequest{
 		Email:    "protik2095@gmail.com",
 		Password: "123",
-		UserID:1000002,
+		UserID:   1000002,
 	}
 
 	a, err := json.Marshal(crd)
@@ -306,12 +294,12 @@ func deleteUserResponseTest(){
 	}
 	dataToSend := utilities.EncodeMessage(utilities.DeleteUser, a)
 
-	utilities.Write(conn,dataToSend)
+	utilities.Write(conn, dataToSend)
 
 	receivedDatainBytes := utilities.Read(conn)
 
 	fmt.Println("In Byte: ", receivedDatainBytes)
-	receivedData := library.CommonResponse{}
+	receivedData := utilities.CommonResponse{}
 
 	err = json.Unmarshal(receivedDatainBytes, &receivedData)
 	if err != nil {

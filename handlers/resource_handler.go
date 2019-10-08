@@ -4,20 +4,19 @@ import (
 	"encoding/json"
 	"net"
 
-	"../library"
 	"../utilities"
 )
 
 func createResourceHandler(conn net.Conn, data []byte) {
 
-	request := library.CreateResourceRequest{}
+	request := utilities.CreateResourceRequest{}
 	err := json.Unmarshal(data, &request)
 	if err != nil {
 		Log.WarningF("Json Unmarshal Error. ", err.Error())
 		return
 	}
 
-	response := library.CommonResponse{
+	response := utilities.CommonResponse{
 		Success: false,
 	}
 	if Authenticate(request.Email, request.Password, request.Token, request.UserID) {
@@ -46,14 +45,14 @@ func createResourceHandler(conn net.Conn, data []byte) {
 }
 
 func listResourceHandler(conn net.Conn, originalMessage []byte) {
-	request := library.ListResourceRequest{}
+	request := utilities.ListResourceRequest{}
 	err := json.Unmarshal(originalMessage, &request)
 	if err != nil {
 		Log.WarningF("Json Unmarshal Error. ", err.Error())
 		return
 	}
 
-	response := library.ListResourceResponse{}
+	response := utilities.ListResourceResponse{}
 
 	if Authenticate(request.Email, request.Password, request.Token, request.UserID) {
 		list, err := listResource(request.UserID)
@@ -78,14 +77,14 @@ func listResourceHandler(conn net.Conn, originalMessage []byte) {
 }
 
 func deleteResourceHandler(conn net.Conn, originalMessage []byte) {
-	request := library.DeleteResourceRequest{}
+	request := utilities.DeleteResourceRequest{}
 	err := json.Unmarshal(originalMessage, &request)
 	if err != nil {
 		Log.WarningF("Json Unmarshal Error. ", err.Error())
 		return
 	}
 
-	response := library.CommonResponse{
+	response := utilities.CommonResponse{
 		Success: false,
 	}
 	if Authenticate(request.Email, request.Password, request.Token, request.UserID) {

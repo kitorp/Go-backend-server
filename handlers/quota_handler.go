@@ -4,20 +4,19 @@ import (
 	"encoding/json"
 	"net"
 
-	"../library"
 	"../utilities"
 )
 
 func setQuotaHandler(conn net.Conn, data []byte) {
 
-	request := library.SetQuotaRequest{}
+	request := utilities.SetQuotaRequest{}
 	err := json.Unmarshal(data, &request)
 	if err != nil {
 		Log.WarningF("Json Unmarshal Error. ", err.Error())
 		return
 	}
 
-	response := library.CommonResponse{}
+	response := utilities.CommonResponse{}
 	response.Success = false
 
 	if Authenticate(request.Email, request.Password, request.Token, request.UserID) {

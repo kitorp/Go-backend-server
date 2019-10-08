@@ -3,9 +3,7 @@ package handlers
 import (
 	"net"
 
-	"../library"
 	"../utilities"
-
 	"github.com/apsdehal/go-logger"
 )
 
@@ -20,7 +18,7 @@ const (
 
 var (
 	Log    *logger.Logger
-	Config library.Configuration
+	Config utilities.Configuration
 )
 
 func GetLogger() *logger.Logger {

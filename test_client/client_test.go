@@ -5,7 +5,6 @@ import (
 	"net"
 	"testing"
 
-	"../library"
 	"../utilities"
 )
 
@@ -13,7 +12,7 @@ func Test_Login(t *testing.T) {
 	conn, _ := net.Dial("tcp", "127.0.0.1:8081")
 	defer conn.Close()
 
-	crd := library.LoginRequest{
+	crd := utilities.LoginRequest{
 		Email:    "sportik@gmail.com",
 		Password: "qwe",
 	}
@@ -28,7 +27,7 @@ func Test_Login(t *testing.T) {
 
 	receivedDatainBytes := utilities.Read(conn)
 
-	receivedData := library.LoginResponse{}
+	receivedData := utilities.LoginResponse{}
 
 	err = json.Unmarshal(receivedDatainBytes, &receivedData)
 	if err != nil {
@@ -43,7 +42,7 @@ func Test_createResource(t *testing.T) {
 	conn, _ := net.Dial("tcp", "127.0.0.1:8081")
 	defer conn.Close()
 
-	crd := library.CreateResourceRequest{
+	crd := utilities.CreateResourceRequest{
 		Email:    "p95@gmail.com",
 		Password: "123",
 		Token:    "",
@@ -61,7 +60,7 @@ func Test_createResource(t *testing.T) {
 
 	receivedDatainBytes := utilities.Read(conn)
 
-	receivedData := library.CommonResponse{}
+	receivedData := utilities.CommonResponse{}
 
 	err = json.Unmarshal(receivedDatainBytes, &receivedData)
 	if err != nil {
@@ -76,7 +75,7 @@ func Test_listResource(t *testing.T) {
 	conn, _ := net.Dial("tcp", "127.0.0.1:8081")
 	defer conn.Close()
 
-	crd := library.ListResourceRequest{
+	crd := utilities.ListResourceRequest{
 		Token:  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6InByb3RpazIwOTVAZ21haWwuY29tIiwiZXhwIjoxNTcwNTQ5NzU5fQ.324xoWAPu0LHXNHYNIKkk6VVSAqG20Vy794zh-iuQkM",
 		UserID: 1000000,
 	}
@@ -91,7 +90,7 @@ func Test_listResource(t *testing.T) {
 
 	receivedDatainBytes := utilities.Read(conn)
 
-	receivedData := library.ListResourceResponse{}
+	receivedData := utilities.ListResourceResponse{}
 
 	err = json.Unmarshal(receivedDatainBytes, &receivedData)
 	if err != nil {
@@ -104,7 +103,7 @@ func Test_listResource2(t *testing.T) {
 	conn, _ := net.Dial("tcp", "127.0.0.1:8081")
 	defer conn.Close()
 
-	crd := library.ListResourceRequest{
+	crd := utilities.ListResourceRequest{
 		Email:    "protik2095@gmail.com",
 		Password: "123",
 		UserID:   1000001,
@@ -120,7 +119,7 @@ func Test_listResource2(t *testing.T) {
 
 	receivedDatainBytes := utilities.Read(conn)
 
-	receivedData := library.ListResourceResponse{}
+	receivedData := utilities.ListResourceResponse{}
 
 	err = json.Unmarshal(receivedDatainBytes, &receivedData)
 	if err != nil {
@@ -132,7 +131,7 @@ func Test_deleteResource(t *testing.T) {
 	conn, _ := net.Dial("tcp", "127.0.0.1:8081")
 	defer conn.Close()
 
-	crd := library.DeleteResourceRequest{
+	crd := utilities.DeleteResourceRequest{
 		Email:    "protik2095@gmail.com",
 		Password: "123",
 		UserID:   1000001,
@@ -149,7 +148,7 @@ func Test_deleteResource(t *testing.T) {
 
 	receivedDatainBytes := utilities.Read(conn)
 
-	receivedData := library.CommonResponse{}
+	receivedData := utilities.CommonResponse{}
 
 	err = json.Unmarshal(receivedDatainBytes, &receivedData)
 	if err != nil {
@@ -164,7 +163,7 @@ func Test_setQouta(t *testing.T) {
 	conn, _ := net.Dial("tcp", "127.0.0.1:8081")
 	defer conn.Close()
 
-	crd := library.SetQuotaRequest{
+	crd := utilities.SetQuotaRequest{
 		Email:    "protik2095@gmail.com",
 		Password: "123",
 		UserID:   1000001,
@@ -181,7 +180,7 @@ func Test_setQouta(t *testing.T) {
 
 	receivedDatainBytes := utilities.Read(conn)
 
-	receivedData := library.CommonResponse{}
+	receivedData := utilities.CommonResponse{}
 
 	err = json.Unmarshal(receivedDatainBytes, &receivedData)
 	if err != nil {
@@ -197,7 +196,7 @@ func Test_createUser(t *testing.T) {
 	conn, _ := net.Dial("tcp", "127.0.0.1:8081")
 	defer conn.Close()
 
-	crd := library.CreateUserRequest{
+	crd := utilities.CreateUserRequest{
 		Email:        "protik2095@gmail.com",
 		Password:     "123",
 		UserEmail:    "sportik@gmail.com",
@@ -215,7 +214,7 @@ func Test_createUser(t *testing.T) {
 
 	receivedDatainBytes := utilities.Read(conn)
 
-	receivedData := library.CommonResponse{}
+	receivedData := utilities.CommonResponse{}
 
 	err = json.Unmarshal(receivedDatainBytes, &receivedData)
 	if err != nil {
@@ -233,7 +232,7 @@ func Test_listUser(t *testing.T) {
 	conn, _ := net.Dial("tcp", "127.0.0.1:8081")
 	defer conn.Close()
 
-	crd := library.ListUserRequest{
+	crd := utilities.ListUserRequest{
 		Email:    "protik2095@gmail.com",
 		Password: "123",
 		Limit:    2,
@@ -250,7 +249,7 @@ func Test_listUser(t *testing.T) {
 
 	receivedDatainBytes := utilities.Read(conn)
 
-	receivedData := library.ListUserResponse{}
+	receivedData := utilities.ListUserResponse{}
 
 	err = json.Unmarshal(receivedDatainBytes, &receivedData)
 	if err != nil {
@@ -265,7 +264,7 @@ func Test_deleteUserResponse(t *testing.T) {
 	conn, _ := net.Dial("tcp", "127.0.0.1:8081")
 	defer conn.Close()
 
-	crd := library.DeleteUserRequest{
+	crd := utilities.DeleteUserRequest{
 		Email:    "protik2095@gmail.com",
 		Password: "123",
 		UserID:   1000002,
@@ -281,7 +280,7 @@ func Test_deleteUserResponse(t *testing.T) {
 
 	receivedDatainBytes := utilities.Read(conn)
 
-	receivedData := library.CommonResponse{}
+	receivedData := utilities.CommonResponse{}
 
 	err = json.Unmarshal(receivedDatainBytes, &receivedData)
 	if err != nil {

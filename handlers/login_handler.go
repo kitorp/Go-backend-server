@@ -4,13 +4,12 @@ import (
 	"encoding/json"
 	"net"
 
-	"../library"
 	"../utilities"
 )
 
 func loginHandler(conn net.Conn, originalMessage []byte) {
 
-	req := library.LoginRequest{}
+	req := utilities.LoginRequest{}
 	err := json.Unmarshal(originalMessage, &req)
 	if err != nil {
 		Log.WarningF("Json Unmarshal Error. ", err.Error())

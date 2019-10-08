@@ -1,4 +1,4 @@
-package library
+package utilities
 
 type Configuration struct {
 	DBUsername  string `json:"DBUsername"`

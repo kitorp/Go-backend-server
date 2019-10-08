@@ -4,20 +4,19 @@ import (
 	"encoding/json"
 	"net"
 
-	"../library"
 	"../utilities"
 )
 
 func createUserHandler(conn net.Conn, data []byte) {
 
-	request := library.CreateUserRequest{}
+	request := utilities.CreateUserRequest{}
 	err := json.Unmarshal(data, &request)
 	if err != nil {
 		Log.WarningF("Json Unmarshal Error. ", err.Error())
 		return
 	}
 
-	response := library.CommonResponse{
+	response := utilities.CommonResponse{
 		Success: false,
 	}
 
@@ -44,14 +43,14 @@ func createUserHandler(conn net.Conn, data []byte) {
 
 func listUserHandler(conn net.Conn, data []byte) {
 
-	request := library.ListUserRequest{}
+	request := utilities.ListUserRequest{}
 	err := json.Unmarshal(data, &request)
 	if err != nil {
 		Log.WarningF("Json Unmarshal Error. ", err.Error())
 		return
 	}
 
-	response := library.ListUserResponse{
+	response := utilities.ListUserResponse{
 		Success: false,
 	}
 
@@ -79,14 +78,14 @@ func listUserHandler(conn net.Conn, data []byte) {
 
 func deleteUserHandler(conn net.Conn, data []byte) {
 
-	request := library.DeleteUserRequest{}
+	request := utilities.DeleteUserRequest{}
 	err := json.Unmarshal(data, &request)
 	if err != nil {
 		Log.WarningF("Json Unmarshal Error. ", err.Error())
 		return
 	}
 
-	response := library.CommonResponse{
+	response := utilities.CommonResponse{
 		Success: false,
 	}
 	if Authenticate(request.Email, request.Password, request.Token, 0) {

@@ -8,12 +8,12 @@ import (
 	"os"
 
 	"./handlers"
-	"./library"
+	"./utilities"
 
 	"github.com/apsdehal/go-logger"
 )
 
-func readConfig() library.Configuration {
+func readConfig() utilities.Configuration {
 
 	jsonFile, err := os.Open("./config.json")
 	if err != nil {
@@ -24,7 +24,7 @@ func readConfig() library.Configuration {
 	if err != nil {
 		fmt.Println("Error reading config file")
 	}
-	var newConfig library.Configuration
+	var newConfig utilities.Configuration
 	err = json.Unmarshal(byteValue, &newConfig)
 	if err != nil {
 		fmt.Println(err)
@@ -37,7 +37,6 @@ func main() {
 	fmt.Println("Starting Server")
 
 	handlers.Config = readConfig()
-
 	f, err := os.OpenFile(handlers.Config.LogFilePath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		fmt.Println("Error opening log file: ", err)
