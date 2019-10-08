@@ -1,0 +1,11 @@
+{
+  "DBUsername": "protik",
+  "DBPassword": "123",
+  "DBAddr": "127.0.0.1",
+  "DBPort": "3306",
+  "DBName": "users",
+  "ConnType": "tcp",
+  "ConnAddress": "127.0.0.1",
+  "ConnPort": "8081",
+  "LogFilePath": "./logs/server.log"
+}

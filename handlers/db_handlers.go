@@ -13,7 +13,8 @@ var (
 )
 
 func GetDB() *sql.DB {
-	Db, err := sql.Open("mysql", "protik:123@/users")
+	dbDetails := Config.DBUsername + ":" + Config.DBPassword + "@tcp(" + Config.DBAddress + ":" + Config.DBPort + ")/" + Config.DBName + "?timeout=1s"
+	Db, err := sql.Open("mysql", dbDetails)
 	if err != nil {
 		Log.WarningF("Error connecting to DB. ", err.Error())
 		return nil
@@ -45,6 +46,7 @@ func tryLogin(request library.LoginRequest) (response library.LoginResponse) {
 
 	passwordMatched, err := ComparePasswords(L, request.Password)
 	if err != nil {
+		response.Error = err.Error()
 		return
 	}
 	if  passwordMatched{
@@ -254,13 +256,13 @@ func deleteResource(userId int, resource string) (err error) {
 	return nil
 }
 
-func createUser(email string, password string) (err error) {
+func createUser(email string, password string, userType int) (err error) {
 
 	hashedPassword, err := HashAndSalt(password)
 	if err != nil {
 		return
 	}
-	_, err = DB.Exec("insert into user_information(email, password) values(?, ?)", email, hashedPassword)
+	_, err = DB.Exec("insert into user_information(email, password, usertype) values(?, ?, ?)", email, hashedPassword, userType)
 	if err != nil {
 		Log.WarningF("Error inserting into DB. ", err.Error())
 		return err

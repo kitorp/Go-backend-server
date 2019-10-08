@@ -13,7 +13,7 @@ func Test_Login(t *testing.T) {
 	defer conn.Close()
 
 	crd := library.LoginRequest{
-		Email:    "sprotik@gmail.com",
+		Email:    "sportik@gmail.com",
 		Password: "qwe",
 	}
 
@@ -33,6 +33,9 @@ func Test_Login(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	if !receivedData.Success{
+		t.Error("Failed")
+	}
 }
 
 func Test_createResource(t *testing.T) {
@@ -40,11 +43,11 @@ func Test_createResource(t *testing.T) {
 	defer conn.Close()
 
 	crd := library.CreateResourceRequest{
-		Email:    "sprotik@gmail.com",
-		Password: "qwe",
+		Email:    "p95@gmail.com",
+		Password: "123",
 		Token:    "",
 		UserID:   1000000,
-		Resource: "your life not my rules",
+		Resource: "my resource",
 	}
 
 	a, err := json.Marshal(crd)
@@ -62,6 +65,9 @@ func Test_createResource(t *testing.T) {
 	err = json.Unmarshal(receivedDatainBytes, &receivedData)
 	if err != nil {
 		t.Error(err)
+	}
+	if receivedData.Success{
+		t.Error("Failed")
 	}
 }
 
@@ -90,6 +96,7 @@ func Test_listResource(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+
 }
 
 func Test_listResource2(t *testing.T) {
@@ -147,6 +154,9 @@ func Test_deleteResource(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	if !receivedData.Success{
+		t.Error("Failed")
+	}
 }
 
 func Test_setQouta(t *testing.T) {
@@ -176,6 +186,9 @@ func Test_setQouta(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	if !receivedData.Success{
+		t.Error("Failed")
+	}
 }
 
 func Test_createUser(t *testing.T) {
@@ -186,8 +199,9 @@ func Test_createUser(t *testing.T) {
 	crd := library.CreateUserRequest{
 		Email:        "protik2095@gmail.com",
 		Password:     "123",
-		UserEmail:    "arif@gmail.com",
-		UserPassword: "baba",
+		UserEmail:    "sportik@gmail.com",
+		UserPassword: "qwe",
+		UserType:0,
 	}
 
 	a, err := json.Marshal(crd)
@@ -206,6 +220,11 @@ func Test_createUser(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+
+	if receivedData.Success{
+		t.Error(receivedData.Error)
+	}
+
 }
 
 func Test_listUser(t *testing.T) {
@@ -236,6 +255,9 @@ func Test_listUser(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	if !receivedData.Success{
+		t.Error("Failed")
+	}
 }
 
 func Test_deleteUserResponse(t *testing.T) {
@@ -263,5 +285,8 @@ func Test_deleteUserResponse(t *testing.T) {
 	err = json.Unmarshal(receivedDatainBytes, &receivedData)
 	if err != nil {
 		t.Error(err)
+	}
+	if !receivedData.Success{
+		t.Error("Failed")
 	}
 }

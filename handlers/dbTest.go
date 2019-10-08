@@ -37,7 +37,7 @@ func updateQoutaTest(){
 }
 
 func createUserTest(){
-	fmt.Println(createUser("sprotik@gmail.com", "qwe"))
+	fmt.Println(createUser("sprotik@gmail.com", "qwe", 0))
 }
 
 func listUserTest(){

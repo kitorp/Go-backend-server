@@ -21,7 +21,7 @@ func createUserHandler(conn net.Conn, data []byte) {
 	}
 
 	if Authenticate(request.Email, request.Password, request.Token, 0) {
-		err := createUser(request.UserEmail, request.UserPassword)
+		err := createUser(request.UserEmail, request.UserPassword, request.UserType)
 		if err != nil {
 			response.Error = err.Error()
 		} else {

@@ -1,5 +1,17 @@
 package library
 
+type Configuration struct {
+	DBUsername  string `json:"DBUsername"`
+	DBPassword  string `json:"DBPassword"`
+	DBAddress   string `json:"DBAddress"`
+	DBPort      string `json:"DBPort"`
+	DBName      string `json:"DBName"`
+	ConnType    string `json:"ConnType"`
+	ConnAddress string `json:"ConnAddress"`
+	ConnPort    string `json:"ConnPort"`
+	LogFilePath string `json:"LogFilePath"`
+}
+
 type LoginRequest struct {
 	Email    string `json:"Email"`
 	Password string `json:"Password"`
@@ -59,6 +71,7 @@ type CreateUserRequest struct {
 	Token        string `json:"Token"`
 	UserEmail    string `json:"UserEmail"`
 	UserPassword string `json:"UserPassword"`
+	UserType 	int 	`json:"UserType"`
 }
 
 type ListUserRequest struct {
