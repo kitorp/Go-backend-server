@@ -54,6 +54,6 @@ func main() {
 	for {
 		conn, _ := listen.Accept()
 		defer conn.Close()
-		handlers.Handler(conn)
+		go handlers.Handler(conn)
 	}
 }
