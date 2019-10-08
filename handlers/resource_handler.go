@@ -109,3 +109,54 @@ func deleteResourceHandler(conn net.Conn, originalMessage []byte) {
 
 	utilities.Write(conn, dataToSend)
 }
+
+
+func addResource(userId int, resource string) (err error) {
+
+	list, err := listResource(userId)
+	if err != nil {
+		return err
+	}
+	list = append(list, resource)
+
+	err = modifyResource(userId, list)
+
+	if err != nil {
+		return err
+	}
+
+	err = addResourceCount(userId, 1)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func deleteResource(userId int, resource string) (err error) {
+
+	list, err := listResource(userId)
+	if err != nil {
+		return
+	}
+
+	var newList []string
+	numberOfDeletedResource := 0
+	for _, s := range list {
+		if s == resource {
+			numberOfDeletedResource++
+			continue
+		}
+		newList = append(newList, s)
+	}
+
+	err = modifyResource(userId, newList)
+	if err != nil {
+		return
+	}
+
+	err = addResourceCount(userId, -numberOfDeletedResource)
+	if err != nil {
+		return
+	}
+	return nil
+}

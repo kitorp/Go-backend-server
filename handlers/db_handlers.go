@@ -27,7 +27,7 @@ func GetDB() *sql.DB {
 	return Db
 }
 
-func getPasswordAndUserIDFromDB(email string)(password string, userId int, err error){
+func getPasswordAndUserIDFromDB(email string) (password string, userId int, err error) {
 
 	row, err := DB.Query("SELECT password, userid FROM user_information WHERE email = ? and deleted = 0", email)
 	if err != nil {
@@ -44,7 +44,6 @@ func getPasswordAndUserIDFromDB(email string)(password string, userId int, err e
 	return
 }
 
-
 func updateToken(token string, email string) (err error) {
 
 	_, err = DB.Exec("update user_information set token = ? where email = ?", token, email)
@@ -55,7 +54,7 @@ func updateToken(token string, email string) (err error) {
 	return nil
 }
 
-func getUserIdAndUserTypeFromDB(email string)(userId int, userType int, err error){
+func getUserIdAndUserTypeFromDB(email string) (userId int, userType int, err error) {
 
 	row, err := DB.Query("SELECT userid, usertype FROM user_information WHERE email = ? and deleted = 0", email)
 	if err != nil {
@@ -73,7 +72,6 @@ func getUserIdAndUserTypeFromDB(email string)(userId int, userType int, err erro
 	}
 	return
 }
-
 
 func updateQuota(userId int, quota int) (err error) {
 
@@ -121,27 +119,6 @@ func canAddResource(userId int) bool {
 
 }
 
-func addResource(userId int, resource string) (err error) {
-
-	list, err := listResource(userId)
-	if err != nil {
-		return err
-	}
-	list = append(list, resource)
-
-	err = modifyResource(userId, list)
-
-	if err != nil {
-		return err
-	}
-
-	err = addResourceCount(userId, 1)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
 func listResource(userId int) (ret []string, err error) {
 
 	row, err := DB.Query("SELECT resource FROM user_information WHERE userid = ?", userId)
@@ -178,35 +155,6 @@ func modifyResource(userID int, list []string) (err error) {
 	if err != nil {
 		Log.WarningF("Error DB Execution. %s", err.Error())
 		return err
-	}
-	return nil
-}
-
-func deleteResource(userId int, resource string) (err error) {
-
-	list, err := listResource(userId)
-	if err != nil {
-		return
-	}
-
-	var newList []string
-	numberOfDeletedResource := 0
-	for _, s := range list {
-		if s == resource {
-			numberOfDeletedResource++
-			continue
-		}
-		newList = append(newList, s)
-	}
-
-	err = modifyResource(userId, newList)
-	if err != nil {
-		return
-	}
-
-	err = addResourceCount(userId, -numberOfDeletedResource)
-	if err != nil {
-		return
 	}
 	return nil
 }
