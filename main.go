@@ -36,21 +36,22 @@ func main() {
 
 	fmt.Println("Starting Server")
 
-	handlers.Config = readConfig()
-	f, err := os.OpenFile(handlers.Config.LogFilePath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	utilities.Config = readConfig()
+	file, err := os.OpenFile(utilities.Config.LogFilePath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		fmt.Println("Error opening log file: ", err)
 	}
-	defer f.Close()
-	log, err := logger.New("backend-server", 1, f)
+	defer file.Close()
+	log, err := logger.New("backend-server", 1, file)
 	if err != nil {
 		fmt.Println("Error initiating log. Error: ", err)
 	}
 
-	handlers.Log = log
+	utilities.Log = log
+	handlers.Log = handlers.GetLogger()
 	handlers.DB = handlers.GetDB()
 
-	listen, _ := net.Listen(handlers.Config.ConnType, handlers.Config.ConnAddress+":"+handlers.Config.ConnPort)
+	listen, _ := net.Listen(utilities.Config.ConnType, utilities.Config.ConnAddress+":"+utilities.Config.ConnPort)
 	defer listen.Close()
 	for {
 		conn, _ := listen.Accept()

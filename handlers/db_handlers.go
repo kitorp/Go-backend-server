@@ -15,7 +15,11 @@ var (
 )
 
 func GetDB() *sql.DB {
-	dbDetails := Config.DBUsername + ":" + Config.DBPassword + "@tcp(" + Config.DBAddress + ":" + Config.DBPort + ")/" + Config.DBName + "?timeout=1s"
+	dbDetails := utilities.Config.DBUsername + ":" +
+		utilities.Config.DBPassword + "@tcp(" +
+		utilities.Config.DBAddress + ":" +
+		utilities.Config.DBPort + ")/" +
+		utilities.Config.DBName + "?timeout=1s"
 	Db, err := sql.Open("mysql", dbDetails)
 	if err != nil {
 		Log.WarningF("Error connecting to DB. ", err.Error())

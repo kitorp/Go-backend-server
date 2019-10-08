@@ -15,24 +15,19 @@ const (
 	userAdmin   = 1
 	userGeneral = 0
 )
-
 var (
-	Log    *logger.Logger
-	Config utilities.Configuration
+	Log *logger.Logger
 )
-
 func GetLogger() *logger.Logger {
-	return Log
+	return utilities.Log
 }
 
 func Handler(conn net.Conn) {
 
-	log := GetLogger()
-
 	messageInBytes := utilities.Read(conn)
 	messageType, data := utilities.DecodeMessage(messageInBytes)
 
-	log.InfoF("Request type: %d", messageType)
+	Log.InfoF("Request type: %d", messageType)
 
 	if messageType == utilities.Login {
 		loginHandler(conn, data)

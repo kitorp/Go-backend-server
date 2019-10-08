@@ -3,7 +3,7 @@ package utilities
 import (
 	"bufio"
 	"encoding/binary"
-	"fmt"
+	"github.com/apsdehal/go-logger"
 	"net"
 )
 
@@ -18,8 +18,9 @@ const (
 	DeleteUser     uint32 = 8
 )
 
-const(
-	maximumPacketSizeInByte uint32 = 1024
+var (
+	Log    *logger.Logger
+	Config Configuration
 )
 
 func EncodeMessage(messageType uint32, data []byte) (message []byte) {
@@ -39,11 +40,11 @@ func DecodeMessage(message []byte) (messageType uint32, data []byte) {
 
 func Read(conn net.Conn) (data []byte) {
 
-	messageInBytes := make([]byte, maximumPacketSizeInByte)
+	messageInBytes := make([]byte, Config.MaximumPacketSizeInByte)
 	length, err := bufio.NewReader(conn).Read(messageInBytes)
 	if err != nil {
-		fmt.Println(err)
-		panic(" bufio read err")
+		Log.WarningF("Read Error. ", err.Error())
+		return
 	}
 	return messageInBytes[:length]
 
@@ -53,6 +54,7 @@ func Write(conn net.Conn, data []byte) {
 
 	_, err := conn.Write(data)
 	if err != nil {
-		panic("data write error")
+		Log.WarningF("Write Error. ", err.Error())
+		return
 	}
 }
