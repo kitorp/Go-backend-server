@@ -7,6 +7,5 @@
   "ConnType": "tcp",
   "ConnAddress": "127.0.0.1",
   "ConnPort": "8081",
-  "LogFilePath": "./logs/server.log",
-  "MaximumPacketSizeInByte" : 1024
+  "LogFilePath": "./logs/server.log"
 }

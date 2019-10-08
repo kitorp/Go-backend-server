@@ -9,8 +9,8 @@ import (
 
 func main() {
 
-	loginTest()
-	//createResourceTest1()
+	//loginTest()
+	createResourceTest1()
 	//createResourceTest2()
 	//listResourceTest1()
 	//listResourceTest2()
@@ -59,11 +59,11 @@ func createResourceTest1() {
 	defer conn.Close()
 
 	crd := utilities.CreateResourceRequest{
-		Email:    "sprotik@gmail.com",
-		Password: "qwe",
+		Email:    "protik2095@gmail.com",
+		Password: "123",
 		Token:    "",
-		UserID:   1000000,
-		Resource: "your life not my rules",
+		UserID:   1000001,
+		Resource: "nice",
 	}
 
 	a, err := json.Marshal(crd)
@@ -189,7 +189,7 @@ func setQoutaTest() {
 		Email:    "protik2095@gmail.com",
 		Password: "123",
 		UserID:   1000001,
-		Quota:    10,
+		Quota:    3,
 	}
 
 	a, err := json.Marshal(crd)

@@ -27,7 +27,7 @@ func IssueToken(username string, expiraryTime time.Duration) string {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString(jwtKey)
 	if err != nil {
-		Log.WarningF("Error Issuing Token. ", err.Error())
+		Log.WarningF("Error Issuing Token. %s", err.Error())
 		return "internal error"
 	}
 

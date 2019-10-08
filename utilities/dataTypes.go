@@ -10,7 +10,6 @@ type Configuration struct {
 	ConnAddress             string `json:"ConnAddress"`
 	ConnPort                string `json:"ConnPort"`
 	LogFilePath             string `json:"LogFilePath"`
-	MaximumPacketSizeInByte uint    `json:"MaximumPacketSizeInByte"`
 }
 
 type LoginRequest struct {

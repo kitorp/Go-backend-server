@@ -12,7 +12,7 @@ func setQuotaHandler(conn net.Conn, data []byte) {
 	request := utilities.SetQuotaRequest{}
 	err := json.Unmarshal(data, &request)
 	if err != nil {
-		Log.WarningF("Json Unmarshal Error. ", err.Error())
+		Log.WarningF("Json Unmarshal Error. %s", err.Error())
 		return
 	}
 
@@ -22,7 +22,7 @@ func setQuotaHandler(conn net.Conn, data []byte) {
 	if Authenticate(request.Email, request.Password, request.Token, request.UserID) {
 		err := updateQuota(request.UserID, request.Quota)
 		if err != nil {
-			response.Error = err.Error()
+			response.Error = "Error updating Quota"
 		} else {
 			response.Success = true
 		}
@@ -33,7 +33,7 @@ func setQuotaHandler(conn net.Conn, data []byte) {
 
 	dataToSend, err := json.Marshal(response)
 	if err != nil {
-		Log.WarningF("Json Marshal Error. ", err.Error())
+		Log.WarningF("Json Marshal Error. %s", err.Error())
 	}
 
 	utilities.Write(conn, dataToSend)

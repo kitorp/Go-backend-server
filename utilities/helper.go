@@ -16,6 +16,8 @@ const (
 	CreateUser     uint32 = 6
 	ListUser       uint32 = 7
 	DeleteUser     uint32 = 8
+
+	MaximumPacketSizeInByte uint32 = 1024
 )
 
 var (
@@ -40,7 +42,7 @@ func DecodeMessage(message []byte) (messageType uint32, data []byte) {
 
 func Read(conn net.Conn) (data []byte) {
 
-	messageInBytes := make([]byte, Config.MaximumPacketSizeInByte)
+	messageInBytes := make([]byte, MaximumPacketSizeInByte)
 	length, err := bufio.NewReader(conn).Read(messageInBytes)
 	if err != nil {
 		Log.WarningF("Read Error. ", err.Error())
@@ -57,4 +59,5 @@ func Write(conn net.Conn, data []byte) {
 		Log.WarningF("Write Error. ", err.Error())
 		return
 	}
+	return
 }

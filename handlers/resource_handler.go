@@ -12,7 +12,7 @@ func createResourceHandler(conn net.Conn, data []byte) {
 	request := utilities.CreateResourceRequest{}
 	err := json.Unmarshal(data, &request)
 	if err != nil {
-		Log.WarningF("Json Unmarshal Error. ", err.Error())
+		Log.WarningF("Json Unmarshal Error. %s", err.Error())
 		return
 	}
 
@@ -25,7 +25,7 @@ func createResourceHandler(conn net.Conn, data []byte) {
 		} else {
 			err := addResource(request.UserID, request.Resource)
 			if err != nil {
-				response.Error = err.Error()
+				response.Error = "Error creating resource"
 			} else {
 				response.Success = true
 			}
@@ -37,7 +37,7 @@ func createResourceHandler(conn net.Conn, data []byte) {
 
 	dataToSend, err := json.Marshal(response)
 	if err != nil {
-		Log.WarningF("Json Marshal Error. ", err.Error())
+		Log.WarningF("Json Marshal Error. %s", err.Error())
 		return
 	}
 
@@ -48,7 +48,7 @@ func listResourceHandler(conn net.Conn, originalMessage []byte) {
 	request := utilities.ListResourceRequest{}
 	err := json.Unmarshal(originalMessage, &request)
 	if err != nil {
-		Log.WarningF("Json Unmarshal Error. ", err.Error())
+		Log.WarningF("Json Unmarshal Error. %s", err.Error())
 		return
 	}
 
@@ -57,7 +57,7 @@ func listResourceHandler(conn net.Conn, originalMessage []byte) {
 	if Authenticate(request.Email, request.Password, request.Token, request.UserID) {
 		list, err := listResource(request.UserID)
 		if err != nil {
-			response.Error = err.Error()
+			response.Error = "Error listing resource"
 
 		} else {
 			response.Resource = append(response.Resource, list...)
@@ -69,7 +69,7 @@ func listResourceHandler(conn net.Conn, originalMessage []byte) {
 
 	dataToSend, err := json.Marshal(response)
 	if err != nil {
-		Log.WarningF("Json Marshal Error. ", err.Error())
+		Log.WarningF("Json Marshal Error. %s", err.Error())
 		return
 	}
 
@@ -80,7 +80,7 @@ func deleteResourceHandler(conn net.Conn, originalMessage []byte) {
 	request := utilities.DeleteResourceRequest{}
 	err := json.Unmarshal(originalMessage, &request)
 	if err != nil {
-		Log.WarningF("Json Unmarshal Error. ", err.Error())
+		Log.WarningF("Json Unmarshal Error. %s", err.Error())
 		return
 	}
 
@@ -90,7 +90,7 @@ func deleteResourceHandler(conn net.Conn, originalMessage []byte) {
 	if Authenticate(request.Email, request.Password, request.Token, request.UserID) {
 		err := deleteResource(request.UserID, request.Resource)
 		if err != nil {
-			response.Error = err.Error()
+			response.Error = "Error deleting resource"
 
 		} else {
 			response.Success = true
@@ -102,7 +102,7 @@ func deleteResourceHandler(conn net.Conn, originalMessage []byte) {
 
 	dataToSend, err := json.Marshal(response)
 	if err != nil {
-		Log.WarningF("Json Marshal Error. ", err.Error())
+		Log.WarningF("Json Marshal Error. %s", err.Error())
 		return
 	}
 

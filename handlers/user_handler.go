@@ -12,7 +12,7 @@ func createUserHandler(conn net.Conn, data []byte) {
 	request := utilities.CreateUserRequest{}
 	err := json.Unmarshal(data, &request)
 	if err != nil {
-		Log.WarningF("Json Unmarshal Error. ", err.Error())
+		Log.WarningF("Json Unmarshal Error. %s", err.Error())
 		return
 	}
 
@@ -23,7 +23,7 @@ func createUserHandler(conn net.Conn, data []byte) {
 	if Authenticate(request.Email, request.Password, request.Token, 0) {
 		err := createUser(request.UserEmail, request.UserPassword, request.UserType)
 		if err != nil {
-			response.Error = err.Error()
+			response.Error = "Error creating user"
 		} else {
 			response.Success = true
 		}
@@ -34,7 +34,7 @@ func createUserHandler(conn net.Conn, data []byte) {
 
 	dataToSend, err := json.Marshal(response)
 	if err != nil {
-		Log.WarningF("Json Marshal Error. ", err.Error())
+		Log.WarningF("Json Marshal Error. %s", err.Error())
 		return
 	}
 
@@ -46,7 +46,7 @@ func listUserHandler(conn net.Conn, data []byte) {
 	request := utilities.ListUserRequest{}
 	err := json.Unmarshal(data, &request)
 	if err != nil {
-		Log.WarningF("Json Unmarshal Error. ", err.Error())
+		Log.WarningF("Json Unmarshal Error. %s", err.Error())
 		return
 	}
 
@@ -57,7 +57,7 @@ func listUserHandler(conn net.Conn, data []byte) {
 	if Authenticate(request.Email, request.Password, request.Token, 0) {
 		list, err := listUser(request.Limit, request.Offset)
 		if err != nil {
-			response.Error = err.Error()
+			response.Error = "Error listing user"
 		} else {
 			response.Users = append(response.Users, list...)
 			response.Success = true
@@ -69,7 +69,7 @@ func listUserHandler(conn net.Conn, data []byte) {
 
 	dataToSend, err := json.Marshal(response)
 	if err != nil {
-		Log.WarningF("Json Marshal Error. ", err.Error())
+		Log.WarningF("Json Marshal Error. %s", err.Error())
 		return
 	}
 
@@ -81,7 +81,7 @@ func deleteUserHandler(conn net.Conn, data []byte) {
 	request := utilities.DeleteUserRequest{}
 	err := json.Unmarshal(data, &request)
 	if err != nil {
-		Log.WarningF("Json Unmarshal Error. ", err.Error())
+		Log.WarningF("Json Unmarshal Error. %s", err.Error())
 		return
 	}
 
@@ -91,7 +91,7 @@ func deleteUserHandler(conn net.Conn, data []byte) {
 	if Authenticate(request.Email, request.Password, request.Token, 0) {
 		err := deleteUser(request.UserID)
 		if err != nil {
-			response.Error = err.Error()
+			response.Error = "Error deleting user"
 
 		} else {
 			response.Success = true
@@ -103,7 +103,7 @@ func deleteUserHandler(conn net.Conn, data []byte) {
 
 	dataToSend, err := json.Marshal(response)
 	if err != nil {
-		Log.WarningF("Json Marshal Error. ", err.Error())
+		Log.WarningF("Json Marshal Error. %s", err.Error())
 		return
 	}
 
