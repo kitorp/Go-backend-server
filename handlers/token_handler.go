@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"github.com/dgrijalva/jwt-go"
-	_ "github.com/dgrijalva/jwt-go"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
 )
 
 var jwtKey = []byte("my_secret_key")

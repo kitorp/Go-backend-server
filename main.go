@@ -1,14 +1,16 @@
 package main
 
 import (
-	"./handlers"
-	"./library"
 	"encoding/json"
 	"fmt"
-	"github.com/apsdehal/go-logger"
 	"io/ioutil"
 	"net"
 	"os"
+
+	"./handlers"
+	"./library"
+
+	"github.com/apsdehal/go-logger"
 )
 
 func readConfig() library.Configuration {
@@ -34,7 +36,7 @@ func main() {
 
 	fmt.Println("Starting Server")
 
-	handlers.Config =  readConfig()
+	handlers.Config = readConfig()
 
 	f, err := os.OpenFile(handlers.Config.LogFilePath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
@@ -43,13 +45,13 @@ func main() {
 	defer f.Close()
 	log, err := logger.New("backend-server", 1, f)
 	if err != nil {
-		fmt.Println("Error initiating log. Error: ",err)
+		fmt.Println("Error initiating log. Error: ", err)
 	}
 
 	handlers.Log = log
 	handlers.DB = handlers.GetDB()
 
-	listen, _ := net.Listen(handlers.Config.ConnType, handlers.Config.ConnAddress+":"+ handlers.Config.ConnPort)
+	listen, _ := net.Listen(handlers.Config.ConnType, handlers.Config.ConnAddress+":"+handlers.Config.ConnPort)
 	defer listen.Close()
 	for {
 		conn, _ := listen.Accept()

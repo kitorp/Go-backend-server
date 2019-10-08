@@ -1,9 +1,11 @@
 package handlers
 
 import (
-	"../library"
 	"fmt"
+
+	"../library"
 )
+
 func DBTest() {
 
 	//tryLoginTest1()
@@ -27,37 +29,35 @@ func tryLoginTest1() {
 	fmt.Println(resp)
 }
 
-func authenticateByTokenTest(){
-	ans:= AuthenticateByToken("abcd", 1000000)
+func authenticateByTokenTest() {
+	ans := AuthenticateByToken("abcd", 1000000)
 	fmt.Println("answer: ", ans)
 }
 
-func updateQoutaTest(){
-	fmt.Println( updateQuota(1000000, 100) )
+func updateQoutaTest() {
+	fmt.Println(updateQuota(1000000, 100))
 }
 
-func createUserTest(){
+func createUserTest() {
 	fmt.Println(createUser("sprotik@gmail.com", "qwe", 0))
 }
 
-func listUserTest(){
-	fmt.Println(listUser(100,0))
+func listUserTest() {
+	fmt.Println(listUser(100, 0))
 }
 
-func deleteUserTest(){
-	fmt.Println(deleteUser(1000001) )
+func deleteUserTest() {
+	fmt.Println(deleteUser(1000001))
 }
 
-func addResourceTest(){
-	fmt.Println(addResource(1000000, "HI there") )
+func addResourceTest() {
+	fmt.Println(addResource(1000000, "HI there"))
 }
 
-
-func listResourceTest(){
-	fmt.Println( listResource(1000000) )
+func listResourceTest() {
+	fmt.Println(listResource(1000000))
 }
 
-func deleteResourceTest(){
-	fmt.Println(deleteResource(1000000, "HI there") )
+func deleteResourceTest() {
+	fmt.Println(deleteResource(1000000, "HI there"))
 }
-

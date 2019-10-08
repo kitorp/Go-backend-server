@@ -1,10 +1,12 @@
 package handlers
 
 import (
+	"net"
+
 	"../library"
 	"../utilities"
+
 	"github.com/apsdehal/go-logger"
-	"net"
 )
 
 const (

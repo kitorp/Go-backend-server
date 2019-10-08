@@ -1,11 +1,13 @@
 package handlers
 
 import (
-	"../library"
 	"database/sql"
 	"encoding/json"
-	_ "github.com/go-sql-driver/mysql"
 	"time"
+
+	"../library"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 var (
@@ -49,7 +51,7 @@ func tryLogin(request library.LoginRequest) (response library.LoginResponse) {
 		response.Error = err.Error()
 		return
 	}
-	if  passwordMatched{
+	if passwordMatched {
 		token, err := getToken(request.Email)
 		if err != nil {
 			response.Error = err.Error()

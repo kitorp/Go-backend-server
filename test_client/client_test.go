@@ -1,11 +1,12 @@
 package main
 
 import (
-	"../library"
-	"../utilities"
 	"encoding/json"
 	"net"
 	"testing"
+
+	"../library"
+	"../utilities"
 )
 
 func Test_Login(t *testing.T) {
@@ -33,7 +34,7 @@ func Test_Login(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if !receivedData.Success{
+	if !receivedData.Success {
 		t.Error("Failed")
 	}
 }
@@ -66,7 +67,7 @@ func Test_createResource(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if receivedData.Success{
+	if receivedData.Success {
 		t.Error("Failed")
 	}
 }
@@ -154,7 +155,7 @@ func Test_deleteResource(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if !receivedData.Success{
+	if !receivedData.Success {
 		t.Error("Failed")
 	}
 }
@@ -186,7 +187,7 @@ func Test_setQouta(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if !receivedData.Success{
+	if !receivedData.Success {
 		t.Error("Failed")
 	}
 }
@@ -201,7 +202,7 @@ func Test_createUser(t *testing.T) {
 		Password:     "123",
 		UserEmail:    "sportik@gmail.com",
 		UserPassword: "qwe",
-		UserType:0,
+		UserType:     0,
 	}
 
 	a, err := json.Marshal(crd)
@@ -221,7 +222,7 @@ func Test_createUser(t *testing.T) {
 		t.Error(err)
 	}
 
-	if receivedData.Success{
+	if receivedData.Success {
 		t.Error(receivedData.Error)
 	}
 
@@ -255,7 +256,7 @@ func Test_listUser(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if !receivedData.Success{
+	if !receivedData.Success {
 		t.Error("Failed")
 	}
 }
@@ -286,7 +287,7 @@ func Test_deleteUserResponse(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if !receivedData.Success{
+	if !receivedData.Success {
 		t.Error("Failed")
 	}
 }

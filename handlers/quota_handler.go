@@ -1,10 +1,11 @@
 package handlers
 
 import (
-	"../library"
-	"../utilities"
 	"encoding/json"
 	"net"
+
+	"../library"
+	"../utilities"
 )
 
 func setQuotaHandler(conn net.Conn, data []byte) {

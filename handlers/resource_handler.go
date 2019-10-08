@@ -1,10 +1,11 @@
 package handlers
 
 import (
-	"../library"
-	"../utilities"
 	"encoding/json"
 	"net"
+
+	"../library"
+	"../utilities"
 )
 
 func createResourceHandler(conn net.Conn, data []byte) {
@@ -56,7 +57,7 @@ func listResourceHandler(conn net.Conn, originalMessage []byte) {
 
 	if Authenticate(request.Email, request.Password, request.Token, request.UserID) {
 		list, err := listResource(request.UserID)
-		if err!= nil {
+		if err != nil {
 			response.Error = err.Error()
 
 		} else {
@@ -89,7 +90,7 @@ func deleteResourceHandler(conn net.Conn, originalMessage []byte) {
 	}
 	if Authenticate(request.Email, request.Password, request.Token, request.UserID) {
 		err := deleteResource(request.UserID, request.Resource)
-		if err!= nil {
+		if err != nil {
 			response.Error = err.Error()
 
 		} else {
