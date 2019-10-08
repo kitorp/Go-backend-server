@@ -19,9 +19,9 @@ func createResourceHandler(conn net.Conn, data []byte) {
 	response := utilities.CommonResponse{
 		Success: false,
 	}
-	if Authenticate(request.Email, request.Password, request.Token, request.UserID) {
+	if authenticateUser(request.Email, request.Password, request.Token, request.UserID) {
 		if !canAddResource(request.UserID) {
-			response.Error = "Qouta limit exceeded"
+			response.Error = "Quota limit exceeded"
 		} else {
 			err := addResource(request.UserID, request.Resource)
 			if err != nil {
@@ -45,6 +45,7 @@ func createResourceHandler(conn net.Conn, data []byte) {
 }
 
 func listResourceHandler(conn net.Conn, originalMessage []byte) {
+
 	request := utilities.ListResourceRequest{}
 	err := json.Unmarshal(originalMessage, &request)
 	if err != nil {
@@ -54,7 +55,7 @@ func listResourceHandler(conn net.Conn, originalMessage []byte) {
 
 	response := utilities.ListResourceResponse{}
 
-	if Authenticate(request.Email, request.Password, request.Token, request.UserID) {
+	if authenticateUser(request.Email, request.Password, request.Token, request.UserID) {
 		list, err := listResource(request.UserID)
 		if err != nil {
 			response.Error = "Error listing resource"
@@ -77,6 +78,7 @@ func listResourceHandler(conn net.Conn, originalMessage []byte) {
 }
 
 func deleteResourceHandler(conn net.Conn, originalMessage []byte) {
+
 	request := utilities.DeleteResourceRequest{}
 	err := json.Unmarshal(originalMessage, &request)
 	if err != nil {
@@ -87,15 +89,14 @@ func deleteResourceHandler(conn net.Conn, originalMessage []byte) {
 	response := utilities.CommonResponse{
 		Success: false,
 	}
-	if Authenticate(request.Email, request.Password, request.Token, request.UserID) {
+
+	if authenticateUser(request.Email, request.Password, request.Token, request.UserID) {
 		err := deleteResource(request.UserID, request.Resource)
 		if err != nil {
 			response.Error = "Error deleting resource"
-
 		} else {
 			response.Success = true
 		}
-
 	} else {
 		response.Error = "Authentication Error"
 	}

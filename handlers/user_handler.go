@@ -20,7 +20,7 @@ func createUserHandler(conn net.Conn, data []byte) {
 		Success: false,
 	}
 
-	if Authenticate(request.Email, request.Password, request.Token, 0) {
+	if authenticateUser(request.Email, request.Password, request.Token, 0) {
 		err := createUser(request.UserEmail, request.UserPassword, request.UserType)
 		if err != nil {
 			response.Error = "Error creating user"
@@ -54,7 +54,7 @@ func listUserHandler(conn net.Conn, data []byte) {
 		Success: false,
 	}
 
-	if Authenticate(request.Email, request.Password, request.Token, 0) {
+	if authenticateUser(request.Email, request.Password, request.Token, 0) {
 		list, err := listUser(request.Limit, request.Offset)
 		if err != nil {
 			response.Error = "Error listing user"
@@ -88,7 +88,7 @@ func deleteUserHandler(conn net.Conn, data []byte) {
 	response := utilities.CommonResponse{
 		Success: false,
 	}
-	if Authenticate(request.Email, request.Password, request.Token, 0) {
+	if authenticateUser(request.Email, request.Password, request.Token, 0) {
 		err := deleteUser(request.UserID)
 		if err != nil {
 			response.Error = "Error deleting user"

@@ -34,7 +34,7 @@ func Test_Login(t *testing.T) {
 		t.Error(err)
 	}
 	if !receivedData.Success {
-		t.Error("Failed")
+		t.Error(receivedData)
 	}
 }
 
@@ -67,7 +67,7 @@ func Test_createResource(t *testing.T) {
 		t.Error(err)
 	}
 	if receivedData.Success {
-		t.Error("Failed")
+		t.Error(receivedData)
 	}
 }
 
@@ -155,7 +155,7 @@ func Test_deleteResource(t *testing.T) {
 		t.Error(err)
 	}
 	if !receivedData.Success {
-		t.Error("Failed")
+		t.Error(receivedData)
 	}
 }
 
@@ -187,7 +187,7 @@ func Test_setQouta(t *testing.T) {
 		t.Error(err)
 	}
 	if !receivedData.Success {
-		t.Error("Failed")
+		t.Error(receivedData)
 	}
 }
 
@@ -222,7 +222,7 @@ func Test_createUser(t *testing.T) {
 	}
 
 	if receivedData.Success {
-		t.Error(receivedData.Error)
+		t.Error(receivedData)
 	}
 
 }
@@ -256,7 +256,7 @@ func Test_listUser(t *testing.T) {
 		t.Error(err)
 	}
 	if !receivedData.Success {
-		t.Error("Failed")
+		t.Error(receivedData)
 	}
 }
 
@@ -287,6 +287,6 @@ func Test_deleteUserResponse(t *testing.T) {
 		t.Error(err)
 	}
 	if !receivedData.Success {
-		t.Error("Failed")
+		t.Error(receivedData)
 	}
 }

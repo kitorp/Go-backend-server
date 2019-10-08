@@ -19,14 +19,13 @@ func setQuotaHandler(conn net.Conn, data []byte) {
 	response := utilities.CommonResponse{}
 	response.Success = false
 
-	if Authenticate(request.Email, request.Password, request.Token, request.UserID) {
+	if authenticateUser(request.Email, request.Password, request.Token, request.UserID) {
 		err := updateQuota(request.UserID, request.Quota)
 		if err != nil {
 			response.Error = "Error updating Quota"
 		} else {
 			response.Success = true
 		}
-
 	} else {
 		response.Error = "Authentication Error"
 	}

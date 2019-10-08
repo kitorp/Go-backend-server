@@ -15,9 +15,11 @@ const (
 	userAdmin   = 1
 	userGeneral = 0
 )
+
 var (
 	Log *logger.Logger
 )
+
 func GetLogger() *logger.Logger {
 	return utilities.Log
 }
@@ -50,14 +52,4 @@ func Handler(conn net.Conn) {
 	}
 }
 
-func Authenticate(email string, password string, token string, userid int) bool {
 
-	if len(token) >= tokenLength {
-		return AuthenticateByToken(token, userid)
-	} else if len(email) >= emailLength && len(password) >= passwordLength {
-		return AuthenticateByEmailPassword(email, password, userid)
-	} else {
-		return false
-	}
-
-}

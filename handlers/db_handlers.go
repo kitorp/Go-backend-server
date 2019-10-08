@@ -1,11 +1,9 @@
 package handlers
 
 import (
+	"../utilities"
 	"database/sql"
 	"encoding/json"
-	"time"
-
-	"../utilities"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -15,6 +13,7 @@ var (
 )
 
 func GetDB() *sql.DB {
+
 	dbDetails := utilities.Config.DBUsername + ":" +
 		utilities.Config.DBPassword + "@tcp(" +
 		utilities.Config.DBAddress + ":" +
@@ -28,108 +27,57 @@ func GetDB() *sql.DB {
 	return Db
 }
 
-func tryLogin(request utilities.LoginRequest) (response utilities.LoginResponse) {
+func getPasswordAndUserIDFromDB(email string)(password string, userId int, err error){
 
-	response.Success = false
-	row, err := DB.Query("SELECT password, userid FROM user_information WHERE email = ? and deleted = 0", request.Email)
+	row, err := DB.Query("SELECT password, userid FROM user_information WHERE email = ? and deleted = 0", email)
 	if err != nil {
 		Log.WarningF("Error DB Query for login. %s", err.Error())
-		response.Error = err.Error()
 		return
 	}
-
-	var L string
-	var id int
-
 	for row.Next() {
-
-		err = row.Scan(&L, &id)
+		err = row.Scan(&password, &userId)
 		if err != nil {
 			Log.WarningF("Error Scanning values. %s", err.Error())
-			response.Error = err.Error()
-		}
-	}
-
-	passwordMatched, err := ComparePasswords(L, request.Password)
-	if err != nil {
-		response.Error = "Mismatch Password"
-		return
-	}
-	if passwordMatched {
-		token, err := getToken(request.Email)
-		if err != nil {
-			response.Error = "Token Error"
-			Log.WarningF("Error getting Token. %s", err.Error())
 			return
 		}
-		response.UserID = id
-		response.Token = token
-		response.Success = true
-		return
-	} else {
-		Log.InfoF("Authentication Error for Email: %s", request.Email)
-		response.Error = "Wrong email/password"
-		return
 	}
-
+	return
 }
 
-func getToken(email string) (token string, err error) {
 
-	token = IssueToken(email, 24*time.Hour)
+func updateToken(token string, email string) (err error) {
+
 	_, err = DB.Exec("update user_information set token = ? where email = ?", token, email)
 	if err != nil {
 		Log.WarningF("Error getting Token. %s", err.Error())
-		return "", err
+		return err
 	}
-	return token, nil
+	return nil
 }
 
-func AuthenticateByToken(token string, userid int) bool {
-
-	ok, email := VerifyToken(token)
-	if !ok {
-		Log.InfoF("Token Verification False for email: %s", email)
-		return false
-	}
+func getUserIdAndUserTypeFromDB(email string)(userId int, userType int, err error){
 
 	row, err := DB.Query("SELECT userid, usertype FROM user_information WHERE email = ? and deleted = 0", email)
 	if err != nil {
 		Log.WarningF("Error DB Query for Token Authentication. %s", err.Error())
+		return
 	}
-	var id, userType int
 
 	for row.Next() {
 
-		err = row.Scan(&id, &userType)
+		err = row.Scan(&userId, &userType)
 		if err != nil {
 			Log.WarningF("Error scanning values. %s", err.Error())
-			return false
+			return
 		}
 	}
-
-	if userType == userAdmin || id == userid {
-		return true
-	}
-	return false
+	return
 }
 
-func AuthenticateByEmailPassword(email string, password string, userid int) bool {
-	req := utilities.LoginRequest{
-		Email:    email,
-		Password: password,
-	}
-	response := tryLogin(req)
 
-	if len(response.Error) == 0 {
-		return AuthenticateByToken(response.Token, userid)
-	}
-	return false
-}
+func updateQuota(userId int, quota int) (err error) {
 
-func updateQuota(userid int, quota int) (err error) {
-
-	_, err = DB.Exec("update user_information set qouta = ? where userid = ?", quota, userid)
+	_, err = DB.Exec("update user_information set qouta = ? where userid = ?", quota, userId)
 	if err != nil {
 		Log.WarningF("Error updating Quota in DB. %s", err.Error())
 		return err
@@ -138,6 +86,7 @@ func updateQuota(userid int, quota int) (err error) {
 }
 
 func addResourceCount(userId int, val int) (err error) {
+
 	_, err = DB.Exec("update user_information set resource_count = resource_count + ? where userid = ?", val, userId)
 	if err != nil {
 		Log.WarningF("Error adding Resource in DB. %s", err.Error())
@@ -147,6 +96,7 @@ func addResourceCount(userId int, val int) (err error) {
 }
 
 func canAddResource(userId int) bool {
+
 	row, err := DB.Query("SELECT resource_count, qouta FROM user_information WHERE userid = ? ", userId)
 	if err != nil {
 		Log.WarningF("Error DB Query for Resource. %s", err.Error())
@@ -156,7 +106,6 @@ func canAddResource(userId int) bool {
 	var resourceCount, qouta int
 
 	for row.Next() {
-
 		err = row.Scan(&resourceCount, &qouta)
 		if err != nil {
 			Log.WarningF("Error scanning for values. %s", err.Error())
@@ -172,21 +121,21 @@ func canAddResource(userId int) bool {
 
 }
 
-func addResource(userid int, resource string) (err error) {
+func addResource(userId int, resource string) (err error) {
 
-	list, err := listResource(userid)
+	list, err := listResource(userId)
 	if err != nil {
 		return err
 	}
 	list = append(list, resource)
 
-	err = modifyResource(userid, list)
+	err = modifyResource(userId, list)
 
 	if err != nil {
 		return err
 	}
 
-	err = addResourceCount(userid, 1)
+	err = addResourceCount(userId, 1)
 	if err != nil {
 		return err
 	}
@@ -194,6 +143,7 @@ func addResource(userid int, resource string) (err error) {
 }
 
 func listResource(userId int) (ret []string, err error) {
+
 	row, err := DB.Query("SELECT resource FROM user_information WHERE userid = ?", userId)
 	if err != nil {
 		Log.WarningF("Error DB Query for list Resource. %s", err.Error())
@@ -212,7 +162,6 @@ func listResource(userId int) (ret []string, err error) {
 			Log.WarningF("Error Json Unmarshal. %s", err.Error())
 		}
 	}
-
 	return
 
 }
@@ -227,7 +176,6 @@ func modifyResource(userID int, list []string) (err error) {
 
 	_, err = DB.Exec("update user_information set resource = ? where userid = ?", data, userID)
 	if err != nil {
-
 		Log.WarningF("Error DB Execution. %s", err.Error())
 		return err
 	}
@@ -235,16 +183,17 @@ func modifyResource(userID int, list []string) (err error) {
 }
 
 func deleteResource(userId int, resource string) (err error) {
+
 	list, err := listResource(userId)
 	if err != nil {
 		return
 	}
 
 	var newList []string
-	numberOfdeletedResource := 0
+	numberOfDeletedResource := 0
 	for _, s := range list {
 		if s == resource {
-			numberOfdeletedResource++
+			numberOfDeletedResource++
 			continue
 		}
 		newList = append(newList, s)
@@ -255,7 +204,7 @@ func deleteResource(userId int, resource string) (err error) {
 		return
 	}
 
-	err = addResourceCount(userId, -numberOfdeletedResource)
+	err = addResourceCount(userId, -numberOfDeletedResource)
 	if err != nil {
 		return
 	}
@@ -278,6 +227,7 @@ func createUser(email string, password string, userType int) (err error) {
 }
 
 func listUser(limit int, offset int) (list []utilities.User, err error) {
+
 	row, err := DB.Query("SELECT userid, email, usertype, deleted,resource, resource_count, qouta FROM user_information limit ? , ?  ", offset, limit)
 	if err != nil {
 		Log.WarningF("Error DB Query. %s", err.Error())
@@ -312,6 +262,7 @@ func listUser(limit int, offset int) (list []utilities.User, err error) {
 }
 
 func deleteUser(userId int) (err error) {
+
 	_, err = DB.Exec("update user_information set deleted = 1 where userid = ?", userId)
 	if err != nil {
 
