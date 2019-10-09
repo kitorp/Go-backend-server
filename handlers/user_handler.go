@@ -5,6 +5,8 @@ import (
 	"net"
 
 	"../utilities"
+
+	"github.com/badoux/checkmail"
 )
 
 func createUserHandler(conn net.Conn, data []byte) {
@@ -21,6 +23,10 @@ func createUserHandler(conn net.Conn, data []byte) {
 	}
 
 	if authenticateUser(request.Email, request.Password, request.Token, 0) {
+		if !isEmailValid(request.Email) {
+			response.Error = "Email not valid"
+			return
+		}
 		err := createUser(request.UserEmail, request.UserPassword, request.UserType)
 		if err != nil {
 			response.Error = "Error creating user"
@@ -108,4 +114,13 @@ func deleteUserHandler(conn net.Conn, data []byte) {
 	}
 
 	utilities.Write(conn, dataToSend)
+}
+
+func isEmailValid(email string) bool {
+	err := checkmail.ValidateFormat(email)
+	if err != nil {
+		Log.WarningF("Error email verification. %s", err.Error())
+		return false
+	}
+	return true
 }
