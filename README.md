@@ -15,10 +15,6 @@ Notes
 * By default, the quota is not set, which means a user can create as many resources as
 he wants.
 * You should provide responses for any errors that might occur.
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
 ### Prerequisites
 
 You will need mysql client running on your PC. You can easily install it
@@ -40,9 +36,8 @@ brew install mysql
 
 ### Installing
 
-Now you need to set up the server. For that, you need to configure the 
-config.json file in project directory.
-
+To start the server, you need to configure the config.json file in 
+project directory.
 
 Then form the project directory run the following command
 
@@ -50,7 +45,7 @@ Then form the project directory run the following command
 go run main.go
 ```
 
-This will start the project 
+This will start the server
 
 ## Running the tests
 
