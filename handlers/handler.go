@@ -13,7 +13,6 @@ const (
 	tokenLength    = 1
 
 	userAdmin   = 1
-	userGeneral = 0
 )
 
 var (
