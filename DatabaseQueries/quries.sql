@@ -12,4 +12,6 @@ create table user_information(
 
 Alter table user_information auto_increment = 1000000;
 
-insert into user_information(email, password, usertype)  values('protik2095@gmail.com', '$2a$04$AiKxHSQj9kXFIVdE6Vj9h.LIYMoDgzHWIpr7MYreGQiJ.a4YAWQzW', 1)
+insert into user_information(email, password, usertype)  values('protik2095@gmail.com', '$2a$04$AiKxHSQj9kXFIVdE6Vj9h.LIYMoDgzHWIpr7MYreGQiJ.a4YAWQzW', 1);
+
+create index emailIndex on user_information(email);
